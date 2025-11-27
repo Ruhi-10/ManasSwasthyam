@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | About Us</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /*Scoped styles for the page*/
+    :root{
+      /* Fallbacks in case style.css doesn't define these */
+      --blue-950:#06204d; --blue-900:#0b2a66; --blue-850:#0f316f;
+      --blue-800:#12325e; --blue-700:#1c3b78; --blue-600:#2b5298;
+      --blue-400:#7fa3da; --blue-300:#b5c7e6; --blue-200:#d4e5ff;
+      --blue-150:#e4efff; --blue-100:#eaf2ff; --blue-050:#f5f9ff;
+      --ink:#10264b;
+    }
+    .about *{ box-sizing:border-box }
+    .about { font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#183255; }
+
+    .about main { max-width:1160px; margin:0 auto; padding:34px 20px 84px; }
+
+    /* Hero */
+    .hero{
+      position:relative;
+      border-radius:20px;
+      overflow:hidden;
+      padding:28px;
+      display:grid; gap:22px; grid-template-columns:1.1fr .9fr; align-items:center;
+      background:
+        radial-gradient(1200px 420px at -10% -40%, #fff 10%, var(--blue-050) 40%, #fff 72%),
+        linear-gradient(180deg, var(--blue-050), #fff 60%);
+      border:1px solid var(--blue-200);
+      box-shadow:0 18px 40px rgba(10,53,124,.10);
+      isolation:isolate;
+    }
+    @media (max-width: 960px){ .hero{ grid-template-columns:1fr; padding:22px } }
+    .hero::after{
+      content:""; position:absolute; inset:auto -60px -60px auto; width:420px; height:420px; border-radius:50%;
+      background:radial-gradient(closest-side, rgba(136,174,255,.32), rgba(136,174,255,0));
+      z-index:0; filter:blur(2px);
+    }
+    .hero h1{ position:relative; z-index:1; color:var(--blue-900); font-size:clamp(1.9rem,3vw,2.6rem); margin:0 0 6px; letter-spacing:.2px }
+    .hero p.lead{ position:relative; z-index:1; color:#3e5170; font-size:1.08rem; margin:0 0 14px; line-height:1.55 }
+    .hero .tags{ position:relative; z-index:1; display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border-radius:999px; background:#fff; border:1px solid var(--blue-300);
+      color:#2e4772; font-weight:700; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      white-space:nowrap;
+    }
+    .pill.accent{ background:var(--blue-100); border-color:var(--blue-300) }
+
+    .hero .cta{ position:relative; z-index:1; display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:16px }
+    .btn{
+      appearance:none; border:1px solid var(--blue-900); background:var(--blue-900); color:#fff;
+      padding:12px 16px; border-radius:12px; font-weight:800; cursor:pointer; text-decoration:none; display:inline-block;
+      box-shadow:0 10px 24px rgba(11,42,102,.15); transition:.2s;
+    }
+    .btn:hover{ background:var(--blue-950); border-color:var(--blue-950); transform:translateY(-1px) }
+    .btn.secondary{ background:#fff; color:var(--blue-900); border-color:var(--blue-300); box-shadow:none }
+    .btn.secondary:hover{ background:var(--blue-050) }
+
+    .hero figure{
+      position:relative; margin:0; z-index:1;
+      border-radius:16px; overflow:hidden; border:1px solid var(--blue-200);
+      box-shadow:0 16px 28px rgba(0,0,0,.08);
+      background:#fff;
+    }
+    .hero img{
+      width:100%; height:auto; display:block; object-fit:cover; aspect-ratio: 4 / 3;
+    }
+    .caption{ padding:10px 12px; font-size:.92rem; color:#476086; background:linear-gradient(#fff, var(--blue-050)); }
+
+    /* Stats strip (3 items) */
+    .stats{
+      margin:22px 0 8px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    }
+    @media (max-width: 720px){ .stats{ grid-template-columns:repeat(2,1fr) } }
+    .stat{
+      background:#fff; border:1px solid var(--blue-200); border-radius:14px; padding:14px;
+      text-align:center; box-shadow:0 8px 16px rgba(0,0,0,.05)
+    }
+    .stat .num{ font-weight:800; color:var(--blue-900); font-size:1.5rem }
+    .stat .lbl{ color:#486187; font-size:.9rem }
+
+    /* Sections */
+    .section{ margin-top:30px }
+    .section h2{ color:var(--blue-900); font-size:1.5rem; margin:0 0 10px }
+    .muted{ color:#4a5a72 }
+
+    /* Feature cards */
+    .grid-3{ display:grid; gap:14px; grid-template-columns:repeat(3,1fr) }
+    @media (max-width: 980px){ .grid-3{ grid-template-columns:1fr } }
+    .card{
+      background:#fff; border:1px solid var(--blue-200); border-radius:16px; padding:16px;
+      box-shadow:0 12px 20px rgba(0,0,0,.06); display:grid; gap:8px
+    }
+    .icon{
+      width:42px; height:42px; border-radius:12px; display:inline-grid; place-items:center;
+      background:var(--blue-100); color:var(--blue-900); border:1px solid var(--blue-300); font-weight:800
+    }
+    .card h3{ margin:4px 0; color:var(--blue-850); font-size:1.1rem }
+    .card p{ color:#2f405a; line-height:1.55 }
+
+    /* Trust & safety */
+    .checklist{ display:grid; gap:10px; margin-top:8px }
+    .check{ display:flex; align-items:flex-start; gap:10px }
+    .check .tick{ width:26px; height:26px; border-radius:9px; display:inline-grid; place-items:center;
+      background:var(--blue-100); color:var(--blue-900); border:1px solid var(--blue-300); font-weight:800 }
+
+    .notice{
+      margin-top:12px;
+      display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:14px;
+      background:linear-gradient(180deg, #fff, var(--blue-050)); border:1px dashed var(--blue-300);
+    }
+    .notice strong{ color:var(--blue-900) }
+
+    /* FAQ */
+    .faq{ display:grid; gap:10px }
+    details{
+      border:1px solid var(--blue-200); border-radius:14px; background:#fff; padding:10px 12px;
+      box-shadow:0 6px 14px rgba(0,0,0,.05); transition:background .2s ease;
+    }
+    summary{
+      cursor:pointer; font-weight:800; color:var(--blue-900); outline:none; list-style:none; display:flex; align-items:center; gap:10px;
+    }
+    summary::-webkit-details-marker{ display:none }
+    summary .plus{
+      width:24px; height:24px; border-radius:8px; display:inline-grid; place-items:center; flex:0 0 auto;
+      background:var(--blue-100); border:1px solid var(--blue-300); color:var(--blue-900); font-weight:900;
+      transition:transform .2s ease;
+    }
+    details[open] summary .plus{ transform:rotate(45deg) }
+    details[open]{ background:var(--blue-050) }
+    details > div{ color:#2f405a; padding:8px 2px 2px; line-height:1.55 }
+
+    /* CTA footer */
+    .cta-row{
+      margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-start
+    }
+
+    /* Contact section */
+    .contact{
+      margin-top:28px;
+      background:linear-gradient(180deg, #fff, var(--blue-050));
+      border:1px solid var(--blue-200);
+      border-radius:16px;
+      box-shadow:0 12px 24px rgba(0,0,0,.06);
+      padding:16px;
+    }
+    .contact h2{ color:var(--blue-900); margin:0 0 6px }
+    .contact p{ color:#4a5a72; margin:0 0 12px }
+    .contact-row{
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center
+    }
+    .contact-item{
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:12px; background:#fff; border:1px solid var(--blue-200);
+      box-shadow:0 6px 12px rgba(0,0,0,.04);
+    }
+    .contact-item .bubble{
+      width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+      background:var(--blue-100); border:1px solid var(--blue-300); color:var(--blue-900); font-weight:800;
+      flex:0 0 auto;
+    }
+    /* Non-clickable value style */
+    .contact-item .value{
+      color:var(--blue-900); font-weight:700; user-select:text; cursor:default;
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <!--NAV -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html" aria-current="page">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="about">
+    <main>
+      <!-- HERO -->
+      <section class="hero" aria-labelledby="about-title">
+        <div>
+          <h1 id="about-title">Helping university students thrive everywhere</h1>
+          <p class="lead">
+            ManasSwasthayam supports university students around the world with inclusive, localized care:
+            practical tools, university-run peer spaces &amp; webinars, and access to hospital-affiliated doctors
+            in supported regions. Your wellbeing, your context is protected and respected.
+          </p>
+
+          <div class="tags">
+            <span class="pill">Inclusive & Localized</span>
+            <span class="pill accent">Uni-run Peer Support</span>
+            <span class="pill">Hospital Doctors</span>
+            <span class="pill accent">Data Protected</span>
+          </div>
+
+          <div class="cta">
+            <a class="btn" href="signup.html">Start your free month</a>
+          </div>
+        </div>
+
+        <!-- local file -->
+        <figure>
+          <img src="16.jpg" alt="ManasSwasthayam community" />
+          <figcaption class="caption">Made for student life wherever “university” is today.</figcaption>
+        </figure>
+      </section>
+
+      <!-- Stats (3 items) -->
+      <div class="stats" aria-label="UniMind quick stats">
+        <div class="stat"><div class="num">24/7</div><div class="lbl">self-guided support</div></div>
+        <div class="stat"><div class="num">Uni-led</div><div class="lbl">peer groups & webinars</div></div>
+        <div class="stat"><div class="num">Hospitals</div><div class="lbl">doctor affiliations</div></div>
+      </div>
+
+      <!-- Features -->
+      <section class="section" aria-labelledby="feat-title">
+        <h2 id="feat-title">What we do</h2>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon">🧭</div>
+            <h3>Practical, everyday support</h3>
+            <p>Tools like the Daily Planner and Mood Tracker help you organize tasks, reflect, and build momentum in minutes a day.</p>
+          </div>
+          <div class="card">
+            <div class="icon">👥</div>
+            <h3>Peer support & webinars</h3>
+            <p>Run through participating universities for safe moderation and campus relevance. Learn together, feel less alone.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🏥</div>
+            <h3>Hospital-affiliated doctors</h3>
+            <p>In supported regions, browse licensed clinicians connected to hospitals.</p>
+          </div>
+        </div>
+
+        <div class="notice" role="note" aria-label="Free trial notice">
+          <div>🎁</div>
+          <div>
+            <strong>Free for your first month.</strong> We want university students to explore ManasSwasthayam fully and decide if they want to continue, no pressure.
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust & Safety -->
+      <section class="section" aria-labelledby="trust-title">
+        <h2 id="trust-title">Trust & safety</h2>
+        <p class="muted">Your privacy and safety come first.</p>
+        <div class="checklist">
+          <div class="check">
+            <span class="tick">🔒</span>
+            <div><strong>Data is protected.</strong> Encryption in transit & at rest, strict access controls, and data-minimization. We never sell your data.</div>
+          </div>
+          <div class="check">
+            <span class="tick">🌍</span>
+            <div><strong>Inclusive & localized.</strong> Content and signposting adapt to your region, language, and university guidance.</div>
+          </div>
+          <div class="check">
+            <span class="tick">👩‍🏫</span>
+            <div><strong>Uni-run peer spaces.</strong> Groups & webinars are hosted through universities with trained moderators.</div>
+          </div>
+          <div class="check">
+            <span class="tick">🏥</span>
+            <div><strong>Real clinicians.</strong> Doctors on ManasSwasthayam are licensed and affiliated with hospitals where available.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section" aria-labelledby="faq-title">
+        <h2 id="faq-title">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary><span class="plus">＋</span>Is ManasSwasthayam really free for a month?</summary>
+            <div>Yes. Your first month is free so you can explore the platform and decide if you’d like to continue. We’ll remind you before the trial ends.</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>How is my data protected?</summary>
+            <div>We use encryption in transit and at rest, enforce strict access controls, and collect only what’s needed to run the service. You can request export or deletion from settings.</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>Are peer support groups safe?</summary>
+            <div>Yes — they’re hosted through participating universities with trained moderators and clear community guidelines.</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>Who are the doctors on ManasSwasthyam?</summary>
+            <div>Licensed clinicians affiliated with hospitals (availability varies by region).</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>Is ManasSwasthyam a replacement for emergency care?</summary>
+            <div>No. If you’re in immediate danger, contact local emergency services. See <a href="emergencyhelp.html">Emergency help</a> for quick contacts.</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>Is ManasSwasthayam available in my country?</summary>
+            <div>Self-guided tools work globally. University-run features and hospital directories depend on local partnerships and will expand over time.</div>
+          </details>
+
+          <details>
+            <summary><span class="plus">＋</span>What happens after my free month?</summary>
+            <div>Continue with a paid plan or keep using any free resources your university provides. We keep pricing transparent and student-friendly.</div>
+          </details>
+        </div>
+
+        <div class="cta-row">
+          <a class="btn" href="signup.html">Start your free month</a>
+        </div>
+      </section>
+
+      <!-- CONTACT (non-clickable email & phone) -->
+      <section class="section contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Contact us</h2>
+        <p>Questions, feedback, or partnership enquiries? We’d love to hear from you.</p>
+        <div class="contact-row">
+          <div class="contact-item" aria-label="Email">
+            <span class="bubble">✉️</span>
+            <a href="https://mail.google.com/"><span class="value">support@manasswasthyam.example</span>
+          </div>
+          <div class="contact-item" aria-label="Phone">
+            <span class="bubble">📞</span>
+            <span class="value">+91 9876543210</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <p>© 2025 ManasSwasthayam All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Dropdown behavior -->
+  <script>
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except){
+        dropdowns.forEach(li=>{
+          if(li!==except){
+            li.classList.remove('open');
+            const b=li.querySelector('.dropdown-toggle');
+            if(b) b.setAttribute('aria-expanded','false');
+          }
+        });
+      }
+      dropdowns.forEach(li=>{
+        const btn = li.querySelector('.dropdown-toggle'); if(!btn) return;
+        btn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const isOpen = li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', !isOpen);
+          btn.setAttribute('aria-expanded', String(!isOpen));
+        });
+      });
+      document.addEventListener('click', ()=>closeAll(null));
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeAll(null); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ManasSwasthayam | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 20px 70px; display: none; flex: 1; }
+    .page-title { text-align: left; margin-bottom: 8px; color: #003366; }
+    .hello { color:#444; margin-bottom: 24px; }
+    .dash-card { background:#fff; border:1px solid #b0cff4; border-radius:12px; padding:18px; box-shadow:0 6px 12px rgba(0,51,102,.08); }
+    .list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+    .appt { background:#fff; border:1px solid #b0cff4; border-radius:12px; padding:14px; }
+    .appt h3 { color:#001f4d; margin-bottom:6px; font-size:1.05rem; }
+    .meta { color:#444; font-size:.95rem; margin:2px 0; }
+    .row { display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; align-items:center; }
+    .btn { padding:10px 12px; border-radius:8px; border:1px solid #003366; background:#003366; color:#fff; font-weight:700; cursor:pointer; text-decoration:none; }
+    .btn.alt { background:#fff; color:#003366; }
+    .empty { text-align:center; color:#444; padding:30px 10px; border:1px dashed #b0cff4; border-radius:12px; background:#f7fbff; }
+    .spacer { flex:1; }
+    .tag { display:inline-block; padding:4px 8px; border:1px solid #b0cff4; color:#003366; border-radius:999px; background:#e6f0ff; font-size:.85rem; font-weight:600; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html" aria-current="page">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Account <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+          <li><a href="" id="logoutLink" role="menuitem">Logout</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap" id="page">
+    <div class="row" style="margin-bottom:12px;">
+      <div>
+        <h1 class="page-title">Welcome, <span id="userName">Student</span></h1>
+        <p class="hello">Here’s what you’ve saved and booked. You can manage or add more anytime.</p>
+      </div>
+      <div class="spacer"></div>
+      <div><span class="tag" id="userEmailTag" title="Signed in">Signed in</span></div>
+    </div>
+
+    <section class="dash-card">
+      <div class="row" style="justify-content: space-between;">
+        <strong>Upcoming &amp; saved bookings</strong>
+        <button id="clearBtn" class="btn alt">Clear all</button>
+      </div>
+      <div id="list" class="list" style="margin-top:12px;"></div>
+      <div id="empty" class="empty" style="display:none;">
+        No bookings yet. Try:
+        <a href="finddoctors.html">Find Doctors near you</a>,
+        <a href="peersupport.html">Find Peer Support near you</a>, or
+        <a href="workshopandwebinars.html">Attend Workshops &amp; Webinars</a>.
+      </div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    /* Dropdown behaviour */
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+    })();
+
+    /* Auth + Dashboard logic */
+    (function(){
+      const USER_KEY = 'unimind_user';
+      const BASE_APPT_KEY = 'unimind_appointments';
+
+      const user = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+      if (!user) {
+        const next = encodeURIComponent('dashboard.html');
+        window.location.href = `login.html?next=${next}`;
+        return;
+      }
+
+      // UI
+      document.getElementById('userName').textContent =
+        user.firstName || user.name || (user.email ? user.email.split('@')[0] : 'Student');
+      document.getElementById('userEmailTag').textContent = user.email || 'Signed in';
+      document.getElementById('page').style.display = 'block';
+
+      document.getElementById('logoutLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem(USER_KEY);
+        window.location.href = 'login.html';
+      });
+
+      // Per-user key
+      const uid = (user.email || user.id || 'default').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      const USER_APPT_KEY = `${BASE_APPT_KEY}_${uid}`;
+
+      // Legacy keys to migrate once, then purge
+      const LEGACY_KEYS = [ BASE_APPT_KEY, 'appointments', 'bookings' ];
+
+      const listEl = document.getElementById('list');
+      const emptyEl = document.getElementById('empty');
+
+      function safeRead(key){
+        try { return JSON.parse(localStorage.getItem(key) || '[]'); }
+        catch { return []; }
+      }
+      function saveAppointments(items){
+        localStorage.setItem(USER_APPT_KEY, JSON.stringify(items));
+      }
+      function readAppointments(){
+        return safeRead(USER_APPT_KEY);
+      }
+      function dedupe(items){
+        const seen = new Set();
+        return items.filter(it => {
+          const id = JSON.stringify([it.type, it.name, it.title, it.datetime, it.city, it.hospital, it.mode, it.concern, it.language]);
+          if (seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        });
+      }
+      function sortByDateAsc(items){
+        return items.slice().sort((a,b)=>{
+          const da = a && a.datetime ? new Date(a.datetime).getTime() : Infinity;
+          const db = b && b.datetime ? new Date(b.datetime).getTime() : Infinity;
+          return da - db;
+        });
+      }
+      function adoptLegacyAndPurge(){
+        let merged = readAppointments();
+        if (!merged.length) {
+          LEGACY_KEYS.forEach(k => { merged = merged.concat(safeRead(k)); });
+          merged = dedupe(merged);
+          if (merged.length) saveAppointments(merged);
+        }
+        LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
+      }
+      function formatWhen(dt){
+        if (!dt) return '';
+        const d = new Date(dt);
+        if (isNaN(d)) return '';
+        return `${d.toLocaleDateString()} at ${d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+      }
+
+      function render(items) {
+        listEl.innerHTML = '';
+        if (!items.length) {
+          emptyEl.style.display = 'block';
+          return;
+        }
+        emptyEl.style.display = 'none';
+
+        const sorted = sortByDateAsc(items);
+        saveAppointments(sorted); // persist order so indices align
+
+        sorted.forEach((a, idx) => {
+          const el = document.createElement('div');
+          el.className = 'appt';
+          el.innerHTML = `
+            <h3>${(a.type || '').trim()} ${(a.name || '').trim()}</h3>
+            <div class="meta">${(a.title || '').trim()} ${a.mode ? '• ' + a.mode : ''}</div>
+            <div class="meta">${[a.city, a.hospital].filter(Boolean).join(' • ')}</div>
+            <div class="meta">${a.concern ? 'Concern: ' + a.concern + ' • ' : ''}${a.language ? 'Language: ' + a.language : ''}</div>
+            <div class="meta">${a.datetime ? 'When: ' + formatWhen(a.datetime) : ''}</div>
+            <div class="row">
+              <a class="btn" href="finddoctors.html">Book another</a>
+              <button class="btn alt" data-idx="${idx}">Remove</button>
+            </div>
+          `;
+          listEl.appendChild(el);
+        });
+
+        // Remove (single)
+        listEl.querySelectorAll('button[data-idx]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            const data = readAppointments();
+            if (idx >= 0 && idx < data.length) {
+              data.splice(idx, 1);
+              saveAppointments(data);
+              render(data);
+            }
+          });
+        });
+      }
+
+      // Clear all
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        if (confirm('Clear all bookings?')) {
+          localStorage.removeItem(USER_APPT_KEY);
+          LEGACY_KEYS.forEach(k => localStorage.removeItem(k));
+          render([]);
+        }
+      });
+
+      // Boot
+      adoptLegacyAndPurge();
+      render(readAppointments());
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Footer to bottom layout */
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; }
+
+    .main { flex: 1; display: flex; }
+    .auth-wrap { 
+      max-width: 520px; 
+      margin: 40px auto 80px; 
+      padding: 24px; 
+      background:#fff; 
+      border:1px solid #b0cff4; 
+      border-radius:12px; 
+      box-shadow:0 6px 12px rgba(0,51,102,0.08);
+      width: 100%;
+    }
+    .auth-title { color:#003366; margin-bottom: 6px; }
+    .auth-sub { color:#444; margin-bottom: 18px; }
+    .field { margin-bottom: 14px; }
+    .field label { display:block; font-weight:600; margin-bottom:6px; color:#001f4d; }
+    .field input { width:100%; padding:10px 12px; border:1px solid #b0cff4; border-radius:8px; font-size:1rem; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn { padding: 10px 12px; border-radius: 8px; border: 1px solid #003366; background:#003366; color:#fff; font-weight:700; cursor:pointer; text-decoration:none; }
+    .btn.alt { background:#fff; color:#003366; }
+    .error { background:#fff3f3; border:1px solid #f5b5b5; color:#a40000; padding:10px 12px; border-radius:8px; margin-bottom:10px; display:none; }
+  </style>
+</head>
+<body>
+
+  <!-- Full Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam&nbsp;&nbsp;&nbsp;</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <!-- Our Support Services -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <!-- Useful Resources -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <!-- Wellness Tools -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      
+
+      <!-- Account -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Account <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a id="loginLink" href="login.html" role="menuitem" aria-current="page">Login</a></li>
+          <li><a id="signupLink" href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="main">
+    <div class="auth-wrap">
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Log in to access your personalised dashboard and saved bookings.</p>
+
+      <div id="err" class="error"></div>
+
+      <form id="form">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <button class="btn" type="submit">Log in</button>
+          <a class="btn alt" id="toSignup" href="signup.html">Create account</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Dropdowns
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+    })();
+
+    // Login logic
+    const USERS_KEY = 'unimind_users';
+    const SESSION_KEY = 'unimind_user';
+
+    function getNext() {
+      const p = new URLSearchParams(location.search);
+      return p.get('next') || 'dashboard.html';
+    }
+
+    async function sha256(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+    function loadUsers(){
+      return JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+    }
+
+    // If already logged in, go to next
+    (function(){
+      const me = localStorage.getItem(SESSION_KEY);
+      if (me) {
+        window.location.href = getNext();
+      }
+    })();
+
+    // Preserve next= for signup link + account nav
+    (function syncNextLinks(){
+      const p = new URLSearchParams(location.search);
+      const next = p.get('next');
+      if (next) {
+        const toSignup = document.getElementById('toSignup');
+        const signupLink = document.getElementById('signupLink');
+        if (toSignup) toSignup.href = `signup.html?next=${encodeURIComponent(next)}`;
+        if (signupLink) signupLink.href = `signup.html?next=${encodeURIComponent(next)}`;
+      }
+    })();
+
+    const form = document.getElementById('form');
+    const err = document.getElementById('err');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.style.display='none';
+      const emailRaw = form.email.value.trim();
+      const pass = form.password.value;
+
+      if (!emailRaw || !pass) {
+        err.textContent='Please enter your email and password.'; err.style.display='block'; return;
+      }
+
+      const email = emailRaw.toLowerCase();
+      const users = loadUsers();
+      const user = users[email];
+
+      if (!user) {
+        err.textContent='No account found with that email.'; err.style.display='block'; return;
+      }
+
+      const hash = await sha256(pass);
+      if (hash !== user.passwordHash) {
+        err.textContent='Incorrect password. Try again.'; err.style.display='block'; return;
+      }
+
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        id: user.id, firstName: user.firstName, lastName: user.lastName, email: user.email
+      }));
+      window.location.href = getNext();
+    });
+  </script>
+</body>
+</html>

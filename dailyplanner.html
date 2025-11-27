@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Daily Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Base safety: prevent any sideways clipping */
+    html, body { overflow-x: hidden; }
+
+    /*PLANNER (scoped;blue theme) */
+    .planner *{ box-sizing:border-box }
+    .planner :where(h1,h2,h3,h4,p,ul,ol){ margin:0; padding:0 }
+    .planner ul{ list-style:none; padding:0 }
+    .planner img{ max-width:100%; display:block; height:auto }
+
+    .planner{
+      color:#1a1a1a; background:#fff; min-height:100dvh;
+      display:flex; flex-direction:column;
+      font-family:'Inter', sans-serif;
+    }
+
+    /* Page wrapper (wide but responsive) */
+    .planner main{ flex:1 }
+    .planner .wrap{
+      max-width:1280px; width:100%;
+      margin:0 auto; padding:38px 22px 84px;
+    }
+
+    .planner h1{
+      color:var(--blue-800);
+      text-align:center; font-size:clamp(1.9rem,2.8vw,2.35rem); margin-bottom:12px
+    }
+    .planner .sub{ color:#395272; text-align:center; margin-bottom:26px }
+
+    /* Stack: full-width Quick Add on top, and Plan below */
+    .planner .stack{ display:block }
+    .planner .stack > .card + .card{ margin-top:26px }
+
+    /* Cards */
+    .planner .card{
+      background:var(--blue-050);
+      border:1px solid var(--blue-300);
+      border-radius:14px;
+      box-shadow:0 8px 16px rgba(0, 51, 102, 0.10);
+      /* IMPORTANT: visible so pickers/menus aren't cut */
+      overflow:visible;
+      position:relative;
+      width:100%;
+    }
+    .planner .card-h{
+      padding:14px 18px; border-bottom:1px solid var(--blue-300);
+      color:var(--blue-800); font-weight:800; background:var(--blue-100);
+    }
+    .planner .card-b{ padding:20px 18px 18px }
+    .planner .card-b > * + *{ margin-top:16px }
+
+    /* Form layout — flexible so nothing gets clipped */
+    .planner .row{
+      display:grid; gap:14px; margin-bottom:14px;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+    }
+    .planner .row.full{ grid-template-columns:1fr; margin-bottom:16px }
+    .planner .row.three{
+      /* Auto-fit columns: wrap as needed instead of overflowing */
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    }
+    @media (max-width:860px){
+      .planner .row{ grid-template-columns:1fr }
+      .planner .row.three{ grid-template-columns:1fr }
+    }
+    .planner .row > div{ min-width:0 }
+
+    .planner label{ font-weight:700; color:#2d4260; font-size:1rem; margin-bottom:6px; display:block }
+
+    /* Inputs (no rigid min-inline-sizes that cause overflow) */
+    .planner input[type="text"],
+    .planner input[type="date"],
+    .planner input[type="time"],
+    .planner input[type="number"],
+    .planner select,
+    .planner textarea{
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--blue-300);
+      border-radius:10px;
+      font:inherit; font-size:16px; line-height:1.25;
+      height:48px;
+      background:#fff; color:#1a1a1a;
+      position:relative; z-index:auto;
+      max-width:100%;
+    }
+    .planner textarea{ min-height:110px; height:auto; resize:vertical; line-height:1.45; padding:12px 14px }
+    .planner input:focus, .planner select:focus, .planner textarea:focus{
+      outline:2px solid var(--blue-100); outline-offset:1px; z-index:20;
+      box-shadow:0 0 0 2px var(--blue-050);
+    }
+
+    /* WebKit picker icon padding */
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator{ padding:0 6px }
+
+    /* Buttons */
+    .planner .btn{
+      appearance:none; border:1px solid var(--blue-800); background:var(--blue-800); color:#fff;
+      padding:11px 14px; border-radius:10px; font-weight:800; cursor:pointer; transition:.2s;
+    }
+    .planner .btn:hover{ background:var(--blue-900); border-color:var(--blue-900) }
+    .planner .btn.secondary{ background:var(--blue-100); color:var(--blue-800); border-color:var(--blue-300) }
+    .planner .btn.secondary:hover{ background:var(--blue-050); color:var(--blue-900); border-color:var(--blue-900) }
+    .planner .btn.ghost{ background:#fff; color:#0b2a66; border:1px solid var(--blue-300) }
+    .planner .btn.ghost:hover{ filter:brightness(.97) }
+
+    /* Toolbar */
+    .planner .toolbar{ display:flex; gap:10px 12px; flex-wrap:wrap; align-items:center }
+    .planner .tabs{ display:flex; gap:8px; flex-wrap:wrap }
+    .planner .tab{
+      border:1px solid var(--blue-300); background:var(--blue-100); color:#2d4260;
+      padding:9px 12px; border-radius:999px; cursor:pointer; font-weight:800; transition:.2s;
+    }
+    .planner .tab:hover{ background:var(--blue-900); color:#fff; border-color:var(--blue-900) }
+    .planner .tab[aria-pressed="true"]{ background:#d4e5ff; border-color:var(--blue-300); color:#12325e }
+
+    #search{
+      flex:1 1 260px;
+      padding:10px 14px; border:1px solid var(--blue-300); border-radius:999px; background:#fff
+    }
+    #sort{
+      flex:0 0 auto;
+      padding:10px 14px; border:1px solid var(--blue-300); border-radius:999px; background:#fff
+    }
+
+    /* Task list */
+    .planner .list{ display:grid; gap:12px }
+    .planner .task{
+      border:1px solid var(--blue-300); border-radius:12px; padding:12px;
+      display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:start; background:#fff;
+    }
+    .planner .task.done{ opacity:.6 }
+    .planner .task strong{ color:#223b5d }
+    .planner .meta{ color:#4a5a72; font-size:.95rem }
+    .planner .badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px }
+    .planner .chip{
+      display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid var(--blue-300);
+      font-size:.85rem; color:#395272; background:var(--blue-100)
+    }
+    .planner .chip.P1{ border-color:#ffd9d9; background:#fff5f5; color:#7a1010 }
+    .planner .chip.P2{ border-color:#ffe9c7; background:#fff9ed; color:#6a3e04 }
+    .planner .chip.P3{ border-color:#d8f1da; background:#f5fbf6; color:#0b6626 }
+    .planner .actions{ display:flex; gap:8px }
+    .planner .icon-btn{
+      border:1px solid var(--blue-300); background:#fff; border-radius:10px; padding:8px 10px; cursor:pointer;
+    }
+    .planner .icon-btn:hover{ background:var(--blue-050) }
+    .planner .notes{ color:#2f405a; font-size:.95rem; line-height:1.5; margin-top:6px }
+
+    /* Pomodoro */
+    .planner .pomo{
+      display:grid; gap:12px; border:1px solid var(--blue-300); border-radius:12px; padding:16px; background:#fff
+    }
+    .planner .pomo-time{ font-size:2.3rem; font-weight:800; color:#223b5d; text-align:center; line-height:1 }
+    .planner .pomo-ctrls{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap }
+
+    /* Edit dialog */
+    .planner dialog{ border:none; border-radius:12px; padding:0; width:min(600px,92vw); box-shadow:0 20px 40px rgba(0,0,0,.18) }
+    .planner dialog::backdrop{ background:rgba(0,0,0,.25) }
+    .planner .dlg-h{ padding:14px 16px; border-bottom:1px solid var(--blue-300); font-weight:800; color:#2d4260; background:var(--blue-100) }
+    .planner .dlg-b{ padding:16px }
+    .planner .dlg-f{ display:flex; gap:10px; justify-content:flex-end; padding:12px 16px; border-top:1px solid var(--blue-300); background:var(--blue-050) }
+
+    /* Print */
+    @media print{
+      .navbar, .planner .pomo, .planner .toolbar, .planner dialog{ display:none !important }
+      .planner .wrap{ padding:0 }
+      .planner .card{ box-shadow:none }
+      .planner .actions{ display:none }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem" aria-current="page">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="planner">
+    <main class="wrap">
+      <h1>Daily Planner</h1>
+      <p class="sub">Plan your day, track tasks, and keep momentum. Everything saves automatically in your browser.</p>
+
+      <div class="stack">
+        <!-- QUICK ADD — full width -->
+        <aside class="card" aria-labelledby="qa-h">
+          <div class="card-h" id="qa-h">Quick Add</div>
+          <div class="card-b">
+            <form id="taskForm" autocomplete="off">
+              <div class="row full">
+                <div>
+                  <label for="title">Task title</label>
+                  <input id="title" type="text" placeholder="e.g., Finish methods section" required />
+                </div>
+              </div>
+
+              <div class="row three">
+                <div>
+                  <label for="date">Date</label>
+                  <input id="date" type="date" />
+                </div>
+                <div>
+                  <label for="start">Start</label>
+                  <input id="start" type="time" />
+                </div>
+                <div>
+                  <label for="end">End</label>
+                  <input id="end" type="time" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label for="priority">Priority</label>
+                  <select id="priority">
+                    <option value="P2">P2 – Medium</option>
+                    <option value="P1">P1 – High</option>
+                    <option value="P3">P3 – Low</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="category">Category</label>
+                  <select id="category">
+                    <option value="Study">Study</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Wellbeing">Wellbeing</option>
+                    <option value="Work">Work</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row full">
+                <div>
+                  <label for="notes">Notes</label>
+                  <textarea id="notes" placeholder="Key steps, links, or reminders…"></textarea>
+                </div>
+              </div>
+
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px">
+                <button class="btn" type="submit" id="addBtn">Add Task</button>
+                <button class="btn secondary" type="button" id="clearForm">Clear</button>
+                <span style="flex:1"></span>
+                <button class="btn ghost" type="button" id="printBtn">Print</button>
+              </div>
+            </form>
+
+            <hr style="margin:18px 0; border:none; border-top:1px solid var(--blue-300)" />
+
+            <div class="pomo" aria-label="Pomodoro timer">
+              <div style="display:flex; gap:8px; align-items:center; justify-content:space-between">
+                <strong>Pomodoro</strong>
+                <span class="muted">Focus • Short breaks</span>
+              </div>
+              <div class="row three" style="margin:0">
+                <div>
+                  <label for="focusMins">Focus (mins)</label>
+                  <input id="focusMins" type="number" min="1" value="25" />
+                </div>
+                <div>
+                  <label for="breakMins">Break (mins)</label>
+                  <input id="breakMins" type="number" min="1" value="5" />
+                </div>
+                <div>
+                  <label for="cycles">Cycles</label>
+                  <input id="cycles" type="number" min="1" value="4" />
+                </div>
+              </div>
+              <div class="pomo-time" id="pomoTime">25:00</div>
+              <div class="pomo-ctrls">
+                <button class="btn" type="button" id="pomoStart">Start</button>
+                <button class="btn secondary" type="button" id="pomoPause">Pause</button>
+                <button class="btn ghost" type="button" id="pomoReset">Reset</button>
+              </div>
+              <div class="muted" id="pomoPhase" style="text-align:center">Ready</div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- THE PLANER — full width below -->
+        <section class="card" aria-labelledby="plan-h">
+          <div class="card-h" id="plan-h">Your Plan</div>
+          <div class="card-b">
+            <div class="toolbar" role="toolbar" aria-label="Filters">
+              <div class="tabs" role="group" aria-label="View">
+                <button class="tab" data-view="today" aria-pressed="false" type="button">Today</button>
+                <button class="tab" data-view="week" aria-pressed="false" type="button">This week</button>
+                <button class="tab" data-view="all" aria-pressed="true"  type="button">All</button>
+              </div>
+              <input id="search" type="text" placeholder="Search tasks…" />
+              <select id="sort">
+                <option value="date">Sort by date/time</option>
+                <option value="priority">Sort by priority</option>
+                <option value="alpha">Sort A–Z</option>
+                <option value="created">Sort by created</option>
+              </select>
+            </div>
+
+            <div class="list" id="taskList" aria-live="polite"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+    </footer>
+
+    <!-- Edit dialog -->
+    <dialog id="editDialog">
+      <form method="dialog">
+        <div class="dlg-h">Edit Task</div>
+        <div class="dlg-b">
+          <div class="row full">
+            <div>
+              <label for="editTitle">Task title</label>
+              <input id="editTitle" type="text" required />
+            </div>
+          </div>
+          <div class="row three">
+            <div>
+              <label for="editDate">Date</label>
+              <input id="editDate" type="date" />
+            </div>
+            <div>
+              <label for="editStart">Start</label>
+              <input id="editStart" type="time" />
+            </div>
+            <div>
+              <label for="editEnd">End</label>
+              <input id="editEnd" type="time" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="editPriority">Priority</label>
+              <select id="editPriority">
+                <option value="P1">P1 – High</option>
+                <option value="P2">P2 – Medium</option>
+                <option value="P3">P3 – Low</option>
+              </select>
+            </div>
+            <div>
+              <label for="editCategory">Category</label>
+              <select id="editCategory">
+                <option value="Study">Study</option>
+                <option value="Admin">Admin</option>
+                <option value="Wellbeing">Wellbeing</option>
+                <option value="Work">Work</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="row full">
+            <div>
+              <label for="editNotes">Notes</label>
+              <textarea id="editNotes"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="dlg-f">
+          <button class="btn ghost" value="cancel" type="button" id="editCancel">Cancel</button>
+          <button class="btn" value="default" type="submit" id="editSave">Save</button>
+        </div>
+      </form>
+    </dialog>
+  </div>
+
+  <!-- Dropdowns + Planner JS -->
+  <script>
+    (function(){
+      /* Helpers */
+      const $id = (x)=> document.getElementById(x);
+      const on = (el, type, fn)=> { if(el) el.addEventListener(type, fn); };
+
+      /* Navbar dropdowns */
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      /*Planner state*/
+      const STORAGE_KEY = 'unimindPlanner_fullwidth_v1';
+      const state = { tasks: [], view:'all', search:'', sort:'date' };
+
+      function load(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if(raw){
+            const data = JSON.parse(raw);
+            if(Array.isArray(data.tasks)) state.tasks = data.tasks;
+          }
+        }catch(e){ console.warn('Load failed', e); }
+      }
+      function save(){
+        try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({tasks: state.tasks})); }
+        catch(e){ console.warn('Save failed', e); }
+      }
+
+      /* Dates */
+      function todayISO(){ const d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); }
+      function weekRange(){
+        const d = new Date(), day = (d.getDay()+6)%7; // Monday=0
+        const s = new Date(d); s.setDate(d.getDate()-day); s.setHours(0,0,0,0);
+        const e = new Date(s); e.setDate(s.getDate()+6); e.setHours(23,59,59,999);
+        return [s,e];
+      }
+      function inThisWeek(iso){
+        if(!iso) return true;
+        const [s,e] = weekRange(); const dt = new Date(iso);
+        return dt>=s && dt<=e;
+      }
+
+      /* Render */
+      function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#039;' }[m])); }
+
+      function sortTasks(a,b){
+        switch(state.sort){
+          case 'priority': return (a.priority||'P3').localeCompare(b.priority||'P3');
+          case 'alpha'   : return (a.title||'').localeCompare(b.title||'');
+          case 'created' : return (a.created||0)-(b.created||0);
+          default: {
+            const ka = (a.date||todayISO()) + ' ' + (a.start||'');
+            const kb = (b.date||todayISO()) + ' ' + (b.start||'');
+            return ka.localeCompare(kb);
+          }
+        }
+      }
+
+      function render(){
+        const list = $id('taskList');
+        if(!list) return;
+        list.innerHTML = '';
+
+        let tasks = state.tasks.slice();
+
+        tasks = tasks.filter(t=>{
+          if(state.view==='today') return (!t.date || t.date === todayISO());
+          if(state.view==='week')  return inThisWeek(t.date);
+          return true;
+        });
+
+        if(state.search){
+          const q = state.search.toLowerCase();
+          tasks = tasks.filter(t =>
+            (t.title||'').toLowerCase().includes(q) ||
+            (t.notes||'').toLowerCase().includes(q) ||
+            (t.category||'').toLowerCase().includes(q)
+          );
+        }
+
+        tasks.sort(sortTasks);
+
+        if(tasks.length===0){
+          const empty = document.createElement('div');
+          empty.className='muted';
+          empty.style.padding='4px';
+          empty.textContent = 'No tasks to show.';
+          list.appendChild(empty);
+          return;
+        }
+
+        tasks.forEach(t=>{
+          const item = document.createElement('div');
+          item.className = 'task' + (t.done ? ' done' : '');
+          item.dataset.id = t.id;
+
+          // Left: checkbox
+          const left = document.createElement('div');
+          const cb = document.createElement('input');
+          cb.type='checkbox'; cb.checked=!!t.done; cb.title='Mark complete';
+          cb.addEventListener('change', ()=>{ t.done = cb.checked; save(); render(); });
+          left.appendChild(cb);
+
+          // Middle
+          const mid = document.createElement('div');
+          const title = document.createElement('div');
+          title.innerHTML = `<strong>${escapeHtml(t.title||'Untitled')}</strong>`;
+          mid.appendChild(title);
+
+          const meta = document.createElement('div');
+          meta.className='meta';
+          const dateTxt = t.date ? new Date(t.date+'T00:00').toLocaleDateString() : 'No date';
+          const timeTxt = [t.start, t.end].filter(Boolean).join('–');
+          meta.textContent = `${dateTxt}${timeTxt ? ' • '+timeTxt : ''}`;
+          mid.appendChild(meta);
+
+          if(t.notes){
+            const notes = document.createElement('div');
+            notes.className='notes';
+            notes.textContent = t.notes;
+            mid.appendChild(notes);
+          }
+
+          const badges = document.createElement('div');
+          badges.className='badges';
+          if(t.priority){ const p=document.createElement('span'); p.className='chip '+t.priority; p.textContent=t.priority.replace('P','Priority '); badges.appendChild(p); }
+          if(t.category){ const c=document.createElement('span'); c.className='chip'; c.textContent=t.category; badges.appendChild(c); }
+          mid.appendChild(badges);
+
+          // Right: actions
+          const right = document.createElement('div');
+          right.className='actions';
+          const editBtn = document.createElement('button'); editBtn.className='icon-btn'; editBtn.type='button'; editBtn.textContent='Edit';
+          editBtn.addEventListener('click', ()=> openEdit(t.id));
+          const delBtn  = document.createElement('button'); delBtn.className='icon-btn'; delBtn.type='button'; delBtn.textContent='Delete';
+          delBtn.addEventListener('click', ()=>{
+            if(confirm('Delete this task?')){
+              state.tasks = state.tasks.filter(x=>x.id!==t.id);
+              save(); render();
+            }
+          });
+          right.appendChild(editBtn); right.appendChild(delBtn);
+
+          item.appendChild(left);
+          item.appendChild(mid);
+          item.appendChild(right);
+          list.appendChild(item);
+        });
+      }
+
+      /* Elements */
+      const form      = $id('taskForm');
+      const titleEl   = $id('title');
+      const dateEl    = $id('date');
+      const startEl   = $id('start');
+      const endEl     = $id('end');
+      const prioEl    = $id('priority');
+      const catEl     = $id('category');
+      const notesEl   = $id('notes');
+      const clearBtn  = $id('clearForm');
+      const printBtn  = $id('printBtn');
+
+      /* Add */
+      on(form, 'submit', (e)=>{
+        e.preventDefault();
+        const t = {
+          id: 't_' + Math.random().toString(36).slice(2,10),
+          title   : (titleEl?.value || '').trim(),
+          date    : dateEl?.value || null,
+          start   : startEl?.value || null,
+          end     : endEl?.value || null,
+          priority: prioEl?.value || 'P2',
+          category: catEl?.value || 'Other',
+          notes   : (notesEl?.value || '').trim(),
+          created : Date.now(),
+          done    : false
+        };
+        if(!t.title){ titleEl?.focus(); return; }
+        state.tasks.push(t);
+        save();
+        form?.reset();
+        render();
+      });
+
+      on(clearBtn, 'click', ()=>{ form?.reset(); });
+      on(printBtn, 'click', ()=> window.print());
+
+      /* Pomodoro */
+      let timer=null, remaining=0, phase='focus', cyclesLeft=0, focus=25*60, brk=5*60;
+
+      const elTime   = $id('pomoTime');
+      const elPhase  = $id('pomoPhase');
+      const elFocus  = $id('focusMins');
+      const elBreak  = $id('breakMins');
+      const elCycles = $id('cycles');
+      const btnStart = $id('pomoStart');
+      const btnPause = $id('pomoPause');
+      const btnReset = $id('pomoReset');
+
+      function updatePomo(){
+        if(!elTime || !elPhase) return;
+        const m = String(Math.floor(remaining/60)).padStart(2,'0');
+        const s = String(remaining%60).padStart(2,'0');
+        elTime.textContent = `${m}:${s}`;
+        elPhase.textContent = phase==='focus' ? 'Focus' : 'Break';
+      }
+      function loadPomo(){
+        focus = Math.max(1, parseInt(elFocus?.value||'25',10))*60;
+        brk   = Math.max(1, parseInt(elBreak?.value||'5',10))*60;
+        cyclesLeft = Math.max(1, parseInt(elCycles?.value||'4',10));
+        phase='focus';
+        remaining=focus;
+        updatePomo();
+      }
+      function tick(){
+        if(remaining>0){ remaining--; updatePomo(); return; }
+        if(phase==='focus'){ phase='break'; remaining=brk; updatePomo(); }
+        else{
+          cyclesLeft--;
+          if(cyclesLeft<=0){ stopTimer(); phase='focus'; remaining=focus; updatePomo(); return; }
+          phase='focus'; remaining=focus; updatePomo();
+        }
+      }
+      function startTimer(){ if(!timer){ if(remaining<=0) loadPomo(); timer=setInterval(tick,1000);} }
+      function pauseTimer(){ if(timer){ clearInterval(timer); timer=null; } }
+      function stopTimer(){ pauseTimer(); }
+      function resetTimer(){ stopTimer(); loadPomo(); }
+
+      on(btnStart,'click', startTimer);
+      on(btnPause,'click', pauseTimer);
+      on(btnReset,'click', resetTimer);
+      on(elFocus,'change', resetTimer);
+      on(elBreak,'change', resetTimer);
+      on(elCycles,'change', resetTimer);
+
+      /* Edit dialog */
+      const dlg = $id('editDialog');
+      const editTitle   = $id('editTitle');
+      const editDate    = $id('editDate');
+      const editStart   = $id('editStart');
+      const editEnd     = $id('editEnd');
+      const editPriority= $id('editPriority');
+      const editCategory= $id('editCategory');
+      const editNotes   = $id('editNotes');
+      const editSaveBtn = $id('editSave');
+      const editCancelBtn = $id('editCancel');
+      let editId = null;
+
+      function openEdit(id){
+        const t = state.tasks.find(x=>x.id===id); if(!t) return;
+        editId = id;
+        if(editTitle)   editTitle.value = t.title||'';
+        if(editDate)    editDate.value  = t.date||'';
+        if(editStart)   editStart.value = t.start||'';
+        if(editEnd)     editEnd.value   = t.end||'';
+        if(editPriority)editPriority.value = t.priority||'P2';
+        if(editCategory)editCategory.value = t.category||'Other';
+        if(editNotes)   editNotes.value = t.notes||'';
+        if(dlg && typeof dlg.showModal === 'function') dlg.showModal();
+        else if(dlg) dlg.setAttribute('open','');
+      }
+      on(editSaveBtn,'click',(e)=>{
+        e.preventDefault();
+        const t = state.tasks.find(x=>x.id===editId); if(!t) { closeDlg(); return; }
+        t.title    = (editTitle?.value || t.title).trim();
+        t.date     = editDate?.value || null;
+        t.start    = editStart?.value || null;
+        t.end      = editEnd?.value || null;
+        t.priority = editPriority?.value || t.priority;
+        t.category = editCategory?.value || t.category;
+        t.notes    = (editNotes?.value || '').trim();
+        save(); closeDlg(); render();
+      });
+      on(editCancelBtn,'click',(e)=>{ e.preventDefault(); closeDlg(); });
+      function closeDlg(){ if(dlg && typeof dlg.close==='function') dlg.close(); else if(dlg) dlg.removeAttribute('open'); }
+
+      /* Filters */
+      document.querySelectorAll('.tab').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed','false'));
+          btn.setAttribute('aria-pressed','true');
+          state.view = btn.dataset.view;
+          render();
+        });
+      });
+      on($id('search'),'input', e=>{ state.search=e.target.value; render(); });
+      on($id('sort'),'change', e=>{ state.sort=e.target.value; render(); });
+
+      /* Init */
+      load();
+      loadPomo();
+      render();
+
+      /* Expose for inline handler scope */
+      window.openEdit = openEdit;
+    })();
+  </script>
+</body>
+</html>
+

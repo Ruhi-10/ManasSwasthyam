@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Self-Guided Support</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --sg-ink:#003366; --sg-ink-2:#001f4d; --sg-sky:#f0f6ff; --sg-sky-2:#b0cff4;
+      --sg-muted:#4a5a72; --sg-radius:14px; --sg-shadow:0 4px 10px rgba(0,51,102,.10); --sg-shadow-md:0 10px 24px rgba(0,51,102,.14);
+    }
+    .sg-page{max-width:1100px; margin:0 auto; padding:34px 20px 70px}
+    .sg-title{ color:var(--sg-ink); text-align:center; margin:0 0 8px; font-size:clamp(1.6rem,2.6vw,2.1rem) }
+    .sg-sub{ color:#38506b; text-align:center; margin:0 0 20px }
+    .sg-notes{ display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin:8px 0 20px }
+    .sg-note{ background:#fff; border:1px solid var(--sg-sky-2); border-radius:var(--sg-radius); padding:12px 14px; box-shadow:var(--sg-shadow) }
+    .sg-note b{ color:var(--sg-ink) }
+    .sg-tiles{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); margin:18px 0 10px }
+    .sg-tile{
+      background:#fff; border:1px solid var(--sg-sky-2); border-radius:var(--sg-radius); padding:16px; box-shadow:var(--sg-shadow);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .sg-tile h3{margin:0; color:var(--sg-ink); font-size:1.05rem}
+    .sg-tile p{margin:0; color:#3b4a61}
+    .sg-actions{display:flex; gap:8px; flex-wrap:wrap}
+    .sg-btn{
+      appearance:none; border:1px solid var(--sg-ink); background:var(--sg-ink); color:#fff;
+      padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer;
+      transition:background .15s, border-color .15s, transform .06s ease;
+    }
+    .sg-btn:active{transform:translateY(1px)}
+    .sg-btn.secondary{background:#fff; color:var(--sg-ink)}
+    .sg-btn:hover{background:var(--sg-ink-2); border-color:var(--sg-ink-2)}
+    .sg-btn.secondary:hover{background:#e6f0ff}
+    .sg-chip{
+      border:1px solid var(--sg-sky-2); background:#fff; color:#2a3c55; border-radius:999px;
+      padding:6px 10px; font-weight:600; cursor:pointer; user-select:none;
+    }
+    .sg-chip.is-on{ background:#e6f0ff; border-color:#8fb6ff }
+    .sg-grid{display:grid; gap:16px; grid-template-columns:2fr 1fr; align-items:start; margin-top:14px}
+    @media (max-width: 920px){ .sg-grid{grid-template-columns:1fr} }
+    .sg-card{
+      background:#fff; border:1px solid var(--sg-sky-2); border-radius:var(--sg-radius); padding:16px; box-shadow:var(--sg-shadow);
+    }
+    .sg-card h2{margin:0 0 8px 0; color:var(--sg-ink); font-size:1.1rem}
+    .sg-muted{color:var(--sg-muted); font-size:.95rem}
+    .sg-pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--sg-sky-2); background:#fff; color:#3a4b63}
+
+    /* Calming breath layout */
+    .sg-breathe-wrap{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    @media (max-width: 680px){ .sg-breathe-wrap{grid-template-columns:1fr} }
+    .sg-breather{
+      display:grid; place-items:center; padding:16px; border-radius:12px;
+      background:linear-gradient(180deg, #f7fbff, #fff);
+      border:1px dashed var(--sg-sky-2);
+    }
+    .sg-orb{
+      width:160px; height:160px; border-radius:50%;
+      box-shadow:var(--sg-shadow-md); background:radial-gradient(#cfe1ff, #8fb6ff);
+      animation: sg-breathe 8s ease-in-out infinite;
+    }
+    @keyframes sg-breathe{
+      0%{transform:scale(0.75)} 25%{transform:scale(1.05)} 50%{transform:scale(1.15)}
+      75%{transform:scale(1.05)} 100%{transform:scale(0.75)}
+    }
+    @media (prefers-reduced-motion: reduce){ .sg-orb{animation:none} }
+
+    /* Aligned  pattern */
+    .sg-b-text{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:8px; align-items:center; justify-items:stretch; margin-top:2px;
+    }
+    .sg-b-text .sg-chip{ text-align:center; width:100% }
+
+    .sg-ground-grid{display:grid; gap:10px}
+    .sg-g-block{ border:1px solid var(--sg-sky-2); border-radius:12px; padding:10px; background:#fafcff; }
+    .sg-g-block h3{margin:0 0 6px; font-size:1rem; color:var(--sg-ink); display:flex; justify-content:space-between; align-items:center}
+    .sg-count{font-variant-numeric:tabular-nums; color:#2a3c55}
+    .sg-input, .sg-textarea, .sg-text{
+      width:100%; border:1px solid var(--sg-sky-2); border-radius:10px; background:#eaf2ff;
+      padding:10px 12px; resize:vertical; min-height:44px; font-family:inherit; color:var(--sg-ink)
+    }
+    .sg-row{display:grid; gap:8px; grid-template-columns:1fr 1fr}
+    @media (max-width: 720px){ .sg-row{grid-template-columns:1fr} }
+    .sg-trap-wrap{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0}
+    .sg-helper{border:1px dashed var(--sg-sky-2); background:#fff; border-radius:12px; padding:10px; color:#2d3f58}
+    .sg-history{display:grid; gap:10px}
+    .sg-entry{border:1px solid var(--sg-sky-2); background:#fff; border-radius:12px; padding:10px}
+    .sg-entry h4{margin:0 0 6px 0; color:var(--sg-ink)}
+    .sg-entry small{color:#667}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem" aria-current="page">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="sg-page" id="main">
+    <h1 class="sg-title">Self-Guided Support</h1>
+    <p class="sg-sub">Practical tools you can use in minutes. Everything saves privately on this device.</p>
+
+    <section class="sg-notes" aria-label="Helpful notes">
+      <div class="sg-note"><b>Start small:</b> 2–3 minutes is enough to shift state.</div>
+      <div class="sg-note"><b>Consistency beats intensity:</b> a little daily goes far.</div>
+      <div class="sg-note"><b>Private:</b> saved to your browser (localStorage).</div>
+    </section>
+
+    <section class="sg-tiles" aria-label="Quick start">
+      <article class="sg-tile">
+        <h3>Calming Breath</h3>
+        <p>Follow the orb — Inhale 4 • Hold 4 • Exhale 4 • Hold 4.</p>
+        <div class="sg-actions">
+          <button class="sg-btn" data-jump="#breathing">Start</button>
+          <button class="sg-btn secondary" data-minutes="1" data-action="breath-select">1 min</button>
+          <button class="sg-btn secondary" data-minutes="3" data-action="breath-select">3 min</button>
+          <button class="sg-btn secondary" data-minutes="5" data-action="breath-select">5 min</button>
+        </div>
+      </article>
+
+      <article class="sg-tile">
+        <h3>Grounding (5–4–3–2–1)</h3>
+        <p>Sensory checklist with live counters.</p>
+        <div class="sg-actions">
+          <button class="sg-btn" data-jump="#grounding">Begin</button>
+        </div>
+      </article>
+
+      <article class="sg-tile">
+        <h3>Thought Reframe</h3>
+        <p>Pick a trap, check the facts, write a fairer thought.</p>
+        <div class="sg-actions">
+          <button class="sg-btn" data-jump="#reframe">Open</button>
+        </div>
+      </article>
+
+      <article class="sg-tile">
+        <h3>Mood & Micro-Journal</h3>
+        <p>Add tags and jot a few lines.</p>
+        <div class="sg-actions">
+          <button class="sg-btn" data-jump="#mood">Log now</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="sg-grid">
+      <div aria-label="Interactive tools">
+        <section id="breathing" class="sg-card" aria-labelledby="breathe-h2">
+          <h2 id="breathe-h2">Calming Breath</h2>
+          <p class="sg-muted">Breathe into the belly; keep shoulders soft and slow the exhale slightly.</p>
+          <div class="sg-breathe-wrap">
+            <div class="sg-breather" aria-live="polite">
+              <div class="sg-orb" aria-hidden="true"></div>
+            </div>
+            <div>
+              <div class="sg-b-text" aria-label="Pattern">
+                <span class="sg-chip">Inhale 4</span>
+                <span class="sg-chip">Hold 4</span>
+                <span class="sg-chip">Exhale 4</span>
+                <span class="sg-chip">Hold 4</span>
+              </div>
+
+              <!-- Duration chips inside the tool -->
+              <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap" id="breathChips">
+                <button class="sg-chip is-on" type="button" data-minutes="1">1 min</button>
+                <button class="sg-chip" type="button" data-minutes="3">3 min</button>
+                <button class="sg-chip" type="button" data-minutes="5">5 min</button>
+              </div>
+
+              <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap">
+                <button class="sg-btn" id="startBreath" aria-label="Start breathing timer">Start (1 min)</button>
+                <span class="sg-pill" id="breathStatus" aria-live="polite">Ready</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="grounding" class="sg-card" aria-labelledby="ground-h2">
+          <h2 id="ground-h2">5–4–3–2–1 Grounding</h2>
+          <p class="sg-muted">Enter items for each sense. Commas or new lines both count toward the counters.</p>
+          <div class="sg-ground-grid">
+            <div class="sg-g-block">
+              <h3>5 things you can <b>see</b> <span class="sg-count" id="seeCount">0/5</span></h3>
+              <textarea class="sg-input" id="seeBox" placeholder="e.g., light, window, notebook, water bottle, sky"></textarea>
+            </div>
+            <div class="sg-g-block">
+              <h3>4 things you can <b>feel</b> <span class="sg-count" id="feelCount">0/4</span></h3>
+              <textarea class="sg-input" id="feelBox" placeholder="e.g., chair, sweater, floor, air on skin"></textarea>
+            </div>
+            <div class="sg-g-block">
+              <h3>3 things you can <b>hear</b> <span class="sg-count" id="hearCount">0/3</span></h3>
+              <textarea class="sg-input" id="hearBox" placeholder="e.g., hum, traffic, distant voices"></textarea>
+            </div>
+            <div class="sg-g-block">
+              <h3>2 things you can <b>smell</b> <span class="sg-count" id="smellCount">0/2</span></h3>
+              <textarea class="sg-input" id="smellBox" placeholder="e.g., coffee, soap"></textarea>
+            </div>
+            <div class="sg-g-block">
+              <h3>1 thing you can <b>taste</b> <span class="sg-count" id="tasteCount">0/1</span></h3>
+              <textarea class="sg-input" id="tasteBox" placeholder="e.g., toothpaste, gum"></textarea>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; margin-top:10px; flex-wrap:wrap">
+            <span class="sg-pill" id="gProgress">Progress: 0%</span>
+            <button class="sg-btn" id="saveGround">Save</button>
+            <span class="sg-pill" id="groundStatus" aria-live="polite">Not saved</span>
+            <button class="sg-btn secondary" id="clearGround">Clear</button>
+          </div>
+        </section>
+
+        <section id="reframe" class="sg-card" aria-labelledby="reframe-h2">
+          <h2 id="reframe-h2">Thought Reframe</h2>
+          <div class="sg-muted" style="margin-bottom:8px">1) Write the unhelpful thought. 2) Pick a trap. 3) Check the facts. 4) Write a fairer thought.</div>
+
+          <div style="margin-top:6px">
+            <label for="autoThought" class="sg-muted"><b>Unhelpful thought</b></label>
+            <textarea id="autoThought" class="sg-input" placeholder="Write it exactly as it shows up…"></textarea>
+          </div>
+
+          <div style="margin-top:10px">
+            <span class="sg-muted"><b>Pick a thinking trap</b> (one or two)</span>
+            <div class="sg-trap-wrap" id="trapWrap"></div>
+          </div>
+
+          <div class="sg-row" style="margin-top:10px">
+            <div>
+              <label for="evidenceFor" class="sg-muted"><b>Facts that support it</b></label>
+              <textarea id="evidenceFor" class="sg-input" placeholder="One or two factual reasons…"></textarea>
+            </div>
+            <div>
+              <label for="evidenceAgainst" class="sg-muted"><b>Facts that don’t fit</b></label>
+              <textarea id="evidenceAgainst" class="sg-input" placeholder="Other explanations or missing info…"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:10px">
+            <label for="helperThought" class="sg-muted"><b>Balanced thought</b></label>
+            <input id="helperThought" class="sg-text" type="text" placeholder="Short, kind, and realistic…" />
+            <div class="sg-helper" id="helperIdeas" style="margin-top:8px">Tips appear here after you pick a trap. Click a tip to insert it.</div>
+          </div>
+
+          <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap">
+            <button class="sg-btn" id="saveReframe">Save</button>
+            <span class="sg-pill" id="reframeStatus" aria-live="polite">Not saved</span>
+            <button class="sg-btn secondary" id="clearReframe">Clear</button>
+          </div>
+        </section>
+
+        <section id="mood" class="sg-card" aria-labelledby="mood-h2">
+          <h2 id="mood-h2">Mood & Micro-Journal</h2>
+
+        
+          <!-- Feelings chips -->
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px" id="feelChips" aria-label="Feelings"></div>
+
+          <div style="margin-top:8px">
+            <label for="journal" class="sg-muted">A few lines about today</label>
+            <textarea id="journal" class="sg-input" placeholder="What happened? What helped? What do you need next?"></textarea>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px; flex-wrap:wrap">
+            <button class="sg-btn" id="saveMood">Save entry</button>
+            <span class="sg-pill" id="moodStatus" aria-live="polite">Not saved</span>
+            <button class="sg-btn secondary" id="clearMood">Clear</button>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sg-card" aria-labelledby="progress-h2">
+        <h2 id="progress-h2">Your Progress</h2>
+        <p class="sg-muted" id="streakText">Streak: 0 days</p>
+        <p class="sg-muted" id="lastSaved">Last saved: —</p>
+        <h2 style="margin-top:8px">Recent Entries</h2>
+        <div class="sg-history" id="history"></div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap">
+          <button class="sg-btn secondary" id="clearData">Clear all</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      const STORE_KEY = 'unimind_self_guided_v5';
+      const $  = (id)=>document.getElementById(id);
+
+      // ---- Elements
+      const startBreath  = $('startBreath');
+      const breathStatus = $('breathStatus');
+      const breathChips  = $('breathChips');
+
+      const seeBox=$('seeBox'), feelBox=$('feelBox'), hearBox=$('hearBox'), smellBox=$('smellBox'), tasteBox=$('tasteBox');
+      const seeCount=$('seeCount'), feelCount=$('feelCount'), hearCount=$('hearCount'), smellCount=$('smellCount'), tasteCount=$('tasteCount');
+      const gProgress=$('gProgress'), saveGround=$('saveGround'), groundStatus=$('groundStatus'), clearGround=$('clearGround');
+
+      const trapWrap = $('trapWrap'), helperIdeas=$('helperIdeas'), saveReframe=$('saveReframe'), reframeStatus=$('reframeStatus'), clearReframe=$('clearReframe');
+
+      const journalEl=$('journal'), saveMood=$('saveMood'), moodStatus=$('moodStatus'), clearMood=$('clearMood');
+      const feelWrap = $('feelChips');
+
+      const historyBox=$('history'), lastSaved=$('lastSaved'), streakText=$('streakText'), clearAllBtn=$('clearData');
+
+      // Smooth scroll
+      document.querySelectorAll('[data-jump]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const to = document.querySelector(btn.getAttribute('data-jump'));
+          if(to) to.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+
+      // Tile duration selectors: set selection
+      document.querySelectorAll('[data-action="breath-select"]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const mins = parseInt(btn.getAttribute('data-minutes'),10)||1;
+          selectBreathMinutes(mins);
+          const to = document.querySelector('#breathing');
+          if(to) to.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+      });
+
+      // ---- Local storage helpers
+      function load(){
+        try{
+          return JSON.parse(localStorage.getItem(STORE_KEY) || '{"entries":[],"last":"","streak":0,"lastDay":""}');
+        } catch(e){
+          return {entries:[], last:"", streak:0, lastDay:""};
+        }
+      }
+      function save(data){
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+        refreshSidebar(data);
+      }
+      const nowISO = ()=> new Date().toISOString();
+      const ymd = (d=new Date())=> d.toISOString().slice(0,10);
+
+      function bumpStreak(store){
+        const today = ymd();
+        if(store.lastDay !== today){
+          const prev = store.lastDay;
+          const yest = ymd(new Date(Date.now()-86400000));
+          store.streak = (prev === yest) ? (store.streak||0)+1 : 1;
+          store.lastDay = today;
+        }
+      }
+
+      function addEntry(kind, payload){
+        const store = load();
+        bumpStreak(store);
+        store.last = nowISO();
+        store.entries.unshift({id:(crypto.randomUUID?.()||String(Math.random())).slice(0,8), kind, when: store.last, data: payload});
+        store.entries = store.entries.slice(0,20);
+        save(store);
+        toast(kind);
+      }
+
+      function refreshSidebar(store=load()){
+        lastSaved.textContent = store.last ? new Date(store.last).toLocaleString() : '—';
+        const d = store.streak||0;
+        streakText.textContent = 'Streak: ' + d + ' day' + (d===1?'':'s');
+
+        historyBox.innerHTML = '';
+        if(!store.entries.length){
+          historyBox.innerHTML = '<div class="sg-muted">No entries yet.</div>';
+          return;
+        }
+        const frag = document.createDocumentFragment();
+        store.entries.forEach(e=>{
+          const div = document.createElement('div');
+          div.className = 'sg-entry';
+          const when = new Date(e.when).toLocaleString();
+          let title = '';
+          if(e.kind==='mood'){ title = `Mood ${e.data.mood}/100`; }
+          else if(e.kind==='ground'){ title = 'Grounding'; }
+          else if(e.kind==='reframe'){ title = 'Thought Reframe'; }
+          else if(e.kind==='breath'){ title = `Breathing • ${e.data.minutes} min`; }
+          div.innerHTML = `
+            <h4>${title}</h4>
+            <small>${when}</small>
+            <div style="margin-top:6px; color:#3b4a61; white-space:pre-wrap">${e.data.summary || ''}</div>
+          `;
+          frag.appendChild(div);
+        });
+        historyBox.appendChild(frag);
+      }
+
+      function toast(kind){
+        const map = { mood:moodStatus, ground:groundStatus, reframe:reframeStatus, breath:breathStatus };
+        const pill = map[kind]; if(!pill) return;
+        const prev = pill.textContent;
+        pill.textContent = 'Saved ✓';
+        pill.style.borderColor = '#9ad1a7';
+        pill.style.background = '#eaf8ee';
+        setTimeout(()=>{
+          pill.textContent = (kind==='breath'?prev:'Not saved');
+          pill.style.borderColor='var(--sg-sky-2)';
+          pill.style.background='#fff';
+        }, 1500);
+      }
+
+      // ---- Breathing
+      let breathTimer = null;
+      let breathMinutes = 1; // default selection (matches chip)
+      function selectBreathMinutes(mins){
+        breathMinutes = mins;
+        breathChips.querySelectorAll('button[data-minutes]').forEach(b=>{
+          b.classList.toggle('is-on', parseInt(b.dataset.minutes,10) === breathMinutes);
+        });
+        startBreath.textContent = `Start (${breathMinutes} min)`;
+      }
+      breathChips.querySelectorAll('button[data-minutes]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          selectBreathMinutes(parseInt(b.dataset.minutes,10) || 1);
+        });
+      });
+      function startBreathing(minutes){
+        if(breathTimer){ clearInterval(breathTimer); breathTimer=null; }
+        let remaining = (minutes||breathMinutes)*60;
+        const used = minutes || breathMinutes;
+        breathStatus.textContent = `In session… ${used} min`;
+        addEntry('breath',{minutes: used, summary:`Focused breathing for ${used} minute(s).`});
+        breathTimer = setInterval(()=>{
+          remaining--;
+          if(remaining<=0){
+            clearInterval(breathTimer);
+            breathTimer=null;
+            breathStatus.textContent = 'Done ✓';
+          }
+        },1000);
+      }
+      startBreath.addEventListener('click', ()=> startBreathing(breathMinutes));
+
+      // ---- Grounding
+      function countItems(txt){
+        return (txt||'').split(/\n|,/).map(s=>s.trim()).filter(Boolean).length;
+      }
+      function updateGroundingUI(){
+        const cSee = countItems(seeBox.value), cFeel=countItems(feelBox.value),
+              cHear=countItems(hearBox.value), cSmell=countItems(smellBox.value),
+              cTaste=countItems(tasteBox.value);
+        seeCount.textContent = `${Math.min(cSee,5)}/5`;
+        feelCount.textContent = `${Math.min(cFeel,4)}/4`;
+        hearCount.textContent = `${Math.min(cHear,3)}/3`;
+        smellCount.textContent= `${Math.min(cSmell,2)}/2`;
+        tasteCount.textContent= `${Math.min(cTaste,1)}/1`;
+        const total = cSee + cFeel + cHear + cSmell + cTaste;
+        const pct = Math.min(100, Math.round((total/15)*100));
+        gProgress.textContent = `Progress: ${pct}%`;
+      }
+      [seeBox,feelBox,hearBox,smellBox,tasteBox].forEach(el=> el.addEventListener('input', updateGroundingUI));
+      updateGroundingUI();
+
+      saveGround.addEventListener('click', ()=>{
+        const blob = [
+          'see: '  + (seeBox.value||'').trim(),
+          'feel: ' + (feelBox.value||'').trim(),
+          'hear: ' + (hearBox.value||'').trim(),
+          'smell: '+ (smellBox.value||'').trim(),
+          'taste: '+ (tasteBox.value||'').trim()
+        ].join('\n');
+        addEntry('ground', {summary: blob});
+      });
+
+      clearGround.addEventListener('click', ()=>{
+        [seeBox,feelBox,hearBox,smellBox,tasteBox].forEach(el=> el.value='');
+        updateGroundingUI();
+        groundStatus.textContent = 'Not saved';
+      });
+
+      // ---- Thought Reframe
+      const traps = [
+        {k:'catastrophising', t:'Worst-case thinking', tips:[
+          'What is most likely here?',
+          'Even if it went wrong, how would I cope?'
+        ]},
+        {k:'all-or-nothing', t:'All-or-nothing', tips:[
+          'Some parts went well even if not all did.',
+          'Progress counts even if it is not perfect.'
+        ]},
+        {k:'mind-reading', t:'Mind reading', tips:[
+          'I do not actually know what they think.',
+          'If it matters, I can ask or check.'
+        ]},
+        {k:'overgeneralising', t:'Always/never', tips:[
+          'This is one moment, not forever.',
+          'What are exceptions to this?'
+        ]},
+        {k:'shoulds', t:'Harsh "shoulds"', tips:[
+          'Could > should. What is a kinder goal?',
+          'I am learning; strict rules do not help.'
+        ]},
+        {k:'discounting', t:'Ignoring positives', tips:[
+          'Small wins still count.',
+          'Hold both progress and next steps.'
+        ]},
+        {k:'personalising', t:'It is all my fault', tips:[
+          'What other factors played a role?',
+          'Not everything is under my control.'
+        ]},
+      ];
+      traps.forEach(tr=>{
+        const b = document.createElement('button');
+        b.type='button'; b.className='sg-chip'; b.textContent=tr.t; b.dataset.key=tr.k;
+        b.addEventListener('click', ()=>{
+          b.classList.toggle('is-on');
+          buildHelperIdeas();
+        });
+        trapWrap.appendChild(b);
+      });
+      function buildHelperIdeas(){
+        const on = Array.from(trapWrap.querySelectorAll('.sg-chip.is-on')).map(b=>b.dataset.key);
+        const tips = traps.filter(t=> on.includes(t.k)).flatMap(t=>t.tips);
+        if(!tips.length){
+          helperIdeas.textContent = 'Tips appear here after you pick a trap. Click a tip to insert it.';
+          return;
+        }
+        helperIdeas.innerHTML = tips
+          .map(i=>`<button type="button" class="sg-chip" data-insert="${i.replace(/"/g,'&quot;')}">${i}</button>`)
+          .join(' ');
+      }
+      helperIdeas.addEventListener('click', (e)=>{
+        const btn = e.target.closest('[data-insert]');
+        if(!btn) return;
+        const text = btn.getAttribute('data-insert');
+        const input = $('helperThought');
+        input.value = input.value ? (input.value + ' ' + text) : text;
+        input.focus();
+      });
+      saveReframe.addEventListener('click', ()=>{
+        const auto = ($('autoThought').value||'').trim();
+        const evFor = ($('evidenceFor').value||'').trim();
+        const evAg  = ($('evidenceAgainst').value||'').trim();
+        const help  = ($('helperThought').value||'').trim();
+        const picked = Array.from(trapWrap.querySelectorAll('.sg-chip.is-on')).map(b=>b.textContent).join(', ');
+        const summary = `Thought: ${auto}\nFor: ${evFor}\nAgainst: ${evAg}\nTrap(s): ${picked||'(none)'}\nBalanced: ${help}`;
+        addEntry('reframe', {summary});
+      });
+      clearReframe.addEventListener('click', ()=>{
+        ['autoThought','evidenceFor','evidenceAgainst','helperThought'].forEach(id => { $(id).value = ''; });
+        trapWrap.querySelectorAll('.sg-chip.is-on').forEach(b=> b.classList.remove('is-on'));
+        buildHelperIdeas();
+        reframeStatus.textContent = 'Not saved';
+      });
+      buildHelperIdeas();
+
+      // ---- Feelings chips
+      ['Calm','Content','Proud','Grateful','Anxious','Low','Irritable','Overwhelmed','Tired','Stressed','Hopeful','Motivated']
+        .forEach(f=>{
+          const c = document.createElement('button');
+          c.type='button'; c.className='sg-chip'; c.textContent=f;
+          c.addEventListener('click', ()=> c.classList.toggle('is-on'));
+          feelWrap.appendChild(c);
+        });
+
+      // ---- Mood 
+      let currentMood = 60;
+
+      saveMood.addEventListener('click', ()=>{
+        const text = (journalEl.value||'').trim();
+        const feels = Array.from(feelWrap.querySelectorAll('.sg-chip.is-on')).map(b=>b.textContent);
+        const summary = `Mood: ${currentMood}/100\nFeelings: ${feels.join(', ')||'(none)'}\n${text||'(no text)'}`;
+        addEntry('mood',{mood: currentMood, summary});
+      });
+
+      clearMood.addEventListener('click', ()=>{
+        journalEl.value = '';
+        feelWrap.querySelectorAll('.sg-chip.is-on').forEach(b=> b.classList.remove('is-on'));
+        moodStatus.textContent = 'Not saved';
+      });
+
+      clearAllBtn.addEventListener('click', ()=>{
+        if(confirm('Clear all self-guided data from this device?')){
+          localStorage.removeItem(STORE_KEY);
+          refreshSidebar({entries:[], last:'', streak:0, lastDay:''});
+        }
+      });
+
+      // Init
+      selectBreathMinutes(1);
+      refreshSidebar();
+    })();
+  </script>
+</body>
+</html>
+  

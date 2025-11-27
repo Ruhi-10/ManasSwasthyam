@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Sign up</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    .auth-wrap { max-width: 520px; margin: 40px auto 80px; padding: 24px; background:#fff; border:1px solid #b0cff4; border-radius:12px; box-shadow:0 6px 12px rgba(0,51,102,0.08); }
+    .auth-title { color:#003366; margin-bottom: 6px; }
+    .auth-sub { color:#444; margin-bottom: 18px; }
+    .field { margin-bottom: 14px; }
+    .field label { display:block; font-weight:600; margin-bottom:6px; color:#001f4d; }
+    .field input { width:100%; padding:10px 12px; border:1px solid #b0cff4; border-radius:8px; font-size:1rem; }
+    .hint { font-size:.9rem; color:#555; margin-top:4px; }
+    .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn { padding: 10px 12px; border-radius: 8px; border: 1px solid #003366; background:#003366; color:#fff; font-weight:700; cursor:pointer; text-decoration:none; }
+    .btn.alt { background:#fff; color:#003366; }
+    .error { background:#fff3f3; border:1px solid #f5b5b5; color:#a40000; padding:10px 12px; border-radius:8px; margin-bottom:10px; display:none; }
+    .success { background:#f0fff4; border:1px solid #b8e6c0; color:#145a22; padding:10px 12px; border-radius:8px; margin-bottom:10px; display:none; }
+    .foot { margin-top:12px; font-size:.95rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Full Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <!-- Our Support Services dropdown -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <!-- Useful Resources dropdown -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <!-- Wellness Tools dropdown -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <!-- Account dropdown -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Account <span class="caret">▾</span></button>
+        <ul class="dropdown" role="menu">
+          <li><a id="loginLink" href="login.html" role="menuitem">Login</a></li>
+          <li><a id="signupLink" href="signup.html" role="menuitem" aria-current="page">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="auth-wrap">
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Sign up to save bookings, track tools, and personalise your dashboard.</p>
+
+    <div id="err" class="error"></div>
+    <div id="ok" class="success"></div>
+
+    <form id="form">
+      <div class="row">
+        <div class="field" style="flex:1 1 220px;">
+          <label for="firstName">First name</label>
+          <input id="firstName" name="firstName" autocomplete="given-name" required />
+        </div>
+        <div class="field" style="flex:1 1 220px;">
+          <label for="lastName">Last name</label>
+          <input id="lastName" name="lastName" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" minlength="6" autocomplete="new-password" required />
+        <div class="hint">At least 6 characters.</div>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <button class="btn" type="submit">Create account</button>
+        <a class="btn alt" id="toLogin" href="login.html">Have an account? Log in</a>
+      </div>
+    </form>
+
+    <div class="foot">By continuing you agree to our cookie use and basic data storage for this prototype.</div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <!-- Dropdowns + Signup logic -->
+  <script>
+    // ---------- Navbar dropdowns ----------
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+    })();
+
+    // ---------- Signup logic ----------
+    const USERS_KEY = 'unimind_users';
+    const SESSION_KEY = 'unimind_user';
+
+    function getNext() {
+      const p = new URLSearchParams(location.search);
+      return p.get('next') || 'dashboard.html';
+    }
+
+    async function sha256(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest('SHA-256', enc);
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }
+
+    function loadUsers(){
+      return JSON.parse(localStorage.getItem(USERS_KEY) || '{}'); // map by emailLower
+    }
+    function saveUsers(map){
+      localStorage.setItem(USERS_KEY, JSON.stringify(map));
+    }
+
+    // Preserve next= when linking to login
+    (function syncNextOnLogin(){
+      const p = new URLSearchParams(location.search);
+      const next = p.get('next');
+      const link = document.getElementById('toLogin');
+      const loginLink = document.getElementById('loginLink');
+      if (next) {
+        link.href = `login.html?next=${encodeURIComponent(next)}`;
+        loginLink.href = `login.html?next=${encodeURIComponent(next)}`;
+      }
+    })();
+
+    const form = document.getElementById('form');
+    const err = document.getElementById('err');
+    const ok = document.getElementById('ok');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      err.style.display='none'; ok.style.display='none';
+
+      const firstName = form.firstName.value.trim();
+      const lastName  = form.lastName.value.trim();
+      const emailRaw  = form.email.value.trim();
+      const pass      = form.password.value;
+
+      if (!firstName || !emailRaw || !pass) {
+        err.textContent = 'Please fill in all required fields.'; err.style.display='block'; return;
+      }
+      if (pass.length < 6) {
+        err.textContent = 'Password must be at least 6 characters.'; err.style.display='block'; return;
+      }
+
+      const email = emailRaw.toLowerCase();
+      const users = loadUsers();
+
+      if (users[email]) {
+        err.textContent = 'An account with this email already exists. Try logging in.'; err.style.display='block'; return;
+      }
+
+      const passwordHash = await sha256(pass);
+      const id = 'u_' + Date.now().toString(36);
+
+      users[email] = {
+        id, firstName, lastName, email: emailRaw, passwordHash, createdAt: new Date().toISOString()
+      };
+      saveUsers(users);
+
+      // auto-login
+      localStorage.setItem(SESSION_KEY, JSON.stringify({ id, firstName, lastName, email: emailRaw }));
+
+      ok.textContent = 'Account created! Redirecting…'; ok.style.display='block';
+      setTimeout(()=>{ window.location.href = getNext(); }, 500);
+    });
+  </script>
+</body>
+</html>

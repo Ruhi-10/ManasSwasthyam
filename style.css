@@ -1,0 +1,338 @@
+/*makes box sizing to work with */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* These are the main colours used for the website */
+:root{
+  --blue-900:#1b500b;
+  --blue-800:#550b05d0;
+  --blue-300:#b0cff4;
+  --blue-100:#e6f0ff;
+  --blue-050:#f0f6ff;
+}
+
+/* This sets the main font and default background/text colour */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+/* This styles the main navigation bar */
+.navbar {
+  background-color: var(--blue-050);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 50px;
+  box-shadow: 0 4px 8px rgba(0, 51, 102, 0.1);
+}
+
+/* This is the logo in the navbar */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--blue-800);
+}
+
+/* This styles the list of links in the navbar */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* This styles the links in the navbar */
+.nav-links li a {
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  color: var(--blue-800);
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 10px 16px;
+  background-color: var(--blue-100);
+  border: 1px solid var(--blue-300);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+/* This changes the link background and text colour when hovered */
+.nav-links li a:hover {
+  background-color: var(--blue-900);
+  color: #ffffff;
+  border-color: var(--blue-900);
+}
+
+/* This styles the hero section with a background image and overlay */
+.hero {
+  position: relative;
+  background-image: url('1.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 120px 20px;
+  text-align: center;
+  isolation: isolate;
+}
+
+/* This is the overlay effect on top of the hero image */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 26, 64, 0.55),
+    rgba(0, 26, 64, 0.35)
+  );
+  z-index: 0;
+}
+
+/* This is the container for the text and button in the hero section */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* This styles the main heading in the hero section */
+.hero-content h1 {
+  font-size: 2.8rem;
+  color: #ffffff;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* This styles the paragraph in the hero section */
+.hero-content p {
+  font-size: 1.1rem;
+  margin-bottom: 28px;
+  color: #f2f6ff;
+}
+
+/* This styles the main button in the hero section */
+.btn-primary {
+  background-color: #ffffff;
+  color: var(--blue-800);
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 1px solid #ffffff;
+  transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+  display: inline-block;
+}
+
+/* This changes the button colour when hovered */
+.btn-primary:hover {
+  background-color: var(--blue-050);
+  color: var(--blue-900);
+  transform: translateY(-1px);
+}
+
+/* This styles the features section */
+.features {
+  padding: 70px 50px;
+  background-color: #f4f9ff;
+  text-align: center;
+}
+
+/* This styles the heading in the features section */
+.features h2 {
+  font-size: 2rem;
+  color: var(--blue-800);
+  margin-bottom: 40px;
+}
+
+/* This lays out the feature cards in a flexible grid */
+.feature-cards {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* This styles each individual feature card */
+.card {
+  background-color: var(--blue-100);
+  border: 1px solid var(--blue-300);
+  border-radius: 12px;
+  padding: 25px;
+  width: 300px;
+  box-shadow: 0 6px 12px rgba(0, 51, 102, 0.1);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* This changes the card colour and position when hovered */
+.card:hover {
+  transform: translateY(-5px);
+  background-color: #d4e5ff;
+}
+
+/* This styles the feature card headings */
+.card h3 {
+  color: var(--blue-900);
+  margin-bottom: 12px;
+}
+
+/* This styles the feature card text */
+.card p {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+/* This styles the small text below the cards */
+.register-call {
+  margin-top: 30px;
+  font-weight: 600;
+  color: var(--blue-800);
+}
+
+/* This styles the footer */
+.footer {
+  background-color: #dbe9ff;
+  padding: 20px;
+  text-align: center;
+  color: var(--blue-800);
+  font-size: 0.95rem;
+}
+
+/* This is for the dropdown menus in the navbar */
+.has-dropdown {
+  position: relative;
+}
+
+/* This styles the dropdown toggle buttons */
+.dropdown-toggle {
+  background: transparent;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 10px 16px;
+  background-color: var(--blue-100);
+  border: 1px solid var(--blue-300);
+  border-radius: 8px;
+  color: var(--blue-800);
+  font-weight: 500;
+}
+
+/* This changes the toggle button style when hovered */
+.dropdown-toggle:hover {
+  background-color: var(--blue-900);
+  color: #ffffff;
+  border-color: var(--blue-900);
+}
+
+/* This rotates the caret icon when open */
+.caret {
+  transition: transform 0.2s ease;
+}
+.has-dropdown.open .caret {
+  transform: rotate(180deg);
+}
+
+/* This is the dropdown menu itself */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  min-width: 240px;
+  background: #ffffff;
+  border: 1px solid var(--blue-300);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,51,102,0.1);
+  z-index: 10;
+}
+
+/* This shows the dropdown when open */
+.has-dropdown.open .dropdown {
+  display: block;
+}
+
+/* This styles the links inside the dropdown */
+.dropdown li a {
+  display: block;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 0;
+}
+
+/* This changes the dropdown link background when hovered */
+.dropdown li a:hover {
+  background-color: var(--blue-050);
+}
+
+/* This styles the cookie banner box */
+.cookie-banner{
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: none;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  background: #d1fc9a;
+  color: #301212;
+  border: 1px solid #611111e5;
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+  z-index: 9999;
+}
+
+/* This shows the cookie banner when active */
+.cookie-banner.show{ display:flex; }
+
+/* This styles the cookie banner text */
+.cookie-text{
+  font-size: 0.95rem;
+  line-height: 1.4;
+  max-width: 900px;
+}
+
+/* This styles the link inside the cookie banner */
+.cookie-link{
+  color: #c9ecb1;
+  text-decoration: underline;
+}
+.cookie-link:hover{ text-decoration: none; }
+
+/* This styles the button in the cookie banner */
+.cookie-btn{
+  background: #ffffffff;
+  color: #360303e8;
+  font-weight: 700;
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cookie-btn:hover{
+  filter: brightness(0.95);
+}
+
+/* This adjusts layout for medium screen sizes */
+@media (max-width: 900px){
+  .navbar { padding: 16px 20px; }
+  .nav-links { gap: 10px; }
+  .features { padding: 50px 20px; }
+  .hero-content h1 { font-size: 2.2rem; }
+  .hero { padding: 90px 16px; }
+}
+
+/* This adjusts layout for small mobile screens */
+@media (max-width: 600px){
+  .nav-links li a, .dropdown-toggle { padding: 8px 12px; font-size: 0.95rem; }
+  .card { width: 100%; }
+  .cookie-banner { flex-direction: column; align-items: stretch; }
+  .cookie-btn { width: 100%; margin-top: 8px; }
+}

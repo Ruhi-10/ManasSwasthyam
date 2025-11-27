@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ManasSwasthyam | Find Peer Support Near You</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 20px 70px; }
+    .page-title { text-align: center; margin-bottom: 24px; color: #003366; }
+    .search-panel { background: #ffffff; border: 1px solid #b0cff4; border-radius: 12px; padding: 18px; box-shadow: 0 6px 12px rgba(0,51,102,0.08); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; align-items: end; }
+    .form-grid .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-weight: 600; color: #003366; }
+    .field select { padding: 10px 12px; border-radius: 8px; border: 1px solid #b0cff4; background: #e6f0ff; font: inherit; color: #003366; }
+
+    .actions { display: flex; gap: 10px; align-items: end; grid-column: 1 / -1; }
+    .btn-search { padding: 12px 18px; border-radius: 8px; border: 1px solid #003366; background: #003366; color: #fff; font-weight: 600; cursor: pointer; }
+    .btn-search:hover { background: #001f4d; }
+
+    .note { margin-top: 10px; color: #444; font-size: 0.95rem; }
+    .results-wrap { margin-top: 24px; }
+    .results-header { display: none; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .results-count { color: #003366; font-weight: 600; }
+
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; align-items: start; }
+    .doc-card { background: #ffffff; border: 1px solid #b0cff4; border-radius: 12px; padding: 16px; box-shadow: 0 6px 12px rgba(0,51,102,0.08); display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .doc-name { color: #001f4d; font-weight: 700; }
+    .doc-meta { color: #444; font-size: 0.95rem; }
+    .rating-row { display: flex; gap: 8px; align-items: center; }
+    .stars { letter-spacing: 2px; font-size: 1rem; color: #f5a623; }
+    .rating-num { color:#444; font-size: .95rem; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; }
+    .badge { display: inline-block; padding: 6px 10px; background: #e6f0ff; border: 1px solid #b0cff4; color: #003366; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
+
+    .doc-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-solid { text-decoration: none; display: inline-block; padding: 10px 12px; border-radius: 8px; font-weight: 600; text-align: center; background: #003366; border: 1px solid #003366; color: #fff; cursor: pointer; }
+    .btn-solid:hover { background: #001f4d; }
+
+    .empty { text-align: center; color: #444; padding: 30px 10px; border: 1px dashed #b0cff4; border-radius: 12px; background: #f7fbff; }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: none; align-items: center; justify-content: center; z-index: 999; }
+    .modal-backdrop.open { display: flex; }
+    .modal { width: min(560px, 92vw); background: #fff; border: 1px solid #b0cff4; border-radius: 14px; box-shadow: 0 18px 40px rgba(0,51,102,0.25); padding: 18px; }
+    .modal header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .modal h3 { margin: 0; color: #003366; font-size: 1.2rem; }
+    .modal .close-btn { border: 1px solid #b0cff4; background: #e6f0ff; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-weight: 700; }
+    .modal .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .modal label { font-weight: 600; color: #003366; }
+    .modal input[type="date"], .modal input[type="time"] { padding: 10px 12px; border: 1px solid #b0cff4; border-radius: 8px; background: #e6f0ff; color: #003366; font: inherit; width: 100%; }
+    .modal .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+    .modal .btn-primary { background: #003366; color: #fff; border: 1px solid #003366; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+    .modal .btn-secondary { background: #fff; color: #003366; border: 1px solid #003366; border-radius: 8px; padding: 10px 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+
+    @media (max-width: 1200px) {
+      .form-grid { grid-template-columns: repeat(3, 1fr); }
+      .actions { grid-column: 1 / -1; justify-content: start; }
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .modal .grid { grid-template-columns: 1fr; }
+      .btn-search { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem" aria-current="page">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <h1 class="page-title">Find Peer Support Near You</h1>
+
+    <section class="search-panel" aria-label="Find peer support form">
+      <div class="form-grid">
+        <div class="field">
+          <label for="country">Country</label>
+          <select id="country" required>
+            <option value="United Kingdom">United Kingdom</option>
+            <option disabled>United States</option>
+            <option disabled>Canada</option>
+            <option disabled>Australia</option>
+            <option disabled>Ireland</option>
+            <option disabled>New Zealand</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="city">City</label>
+          <select id="city" required>
+            <option value="Birmingham" selected>Birmingham</option>
+            <option disabled>London</option>
+            <option disabled>Manchester</option>
+            <option disabled>Leeds</option>
+            <option disabled>Edinburgh</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="English">English</option>
+            <option disabled>Spanish</option>
+            <option disabled>French</option>
+            <option disabled>Arabic</option>
+            <option disabled>Hindi</option>
+            <option disabled>Urdu</option>
+            <option disabled>Mandarin</option>
+            <option disabled>Bengali</option>
+            <option disabled>Polish</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="university">Choose your university</label>
+          <select id="university" required>
+            <option value="">Select a university</option>
+            <option value="Northbridge University">Northbridge University</option>
+            <option value="Riverside College">Riverside College</option>
+            <option value="Kingsford University">Kingsford University</option>
+            <option value="Meadowview Institute" disabled>Meadowview Institute</option>
+            <option value="Harborfield University" disabled>Harborfield University</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="postcode">Postcode</label>
+          <select id="postcode" required>
+            <option value="">Select a postcode</option>
+            <option value="B15 3CC">B15 3CC</option>
+            <option value="B1 1AA">B1 1AA</option>
+            <option value="B3 2BB">B3 2BB</option>
+            <option value="B4 4DD" disabled>B4 4DD</option>
+            <option value="B5 5EE" disabled>B5 5EE</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="concern">Choose your mental health concern</label>
+          <select id="concern" required>
+            <option value="">Select a concern</option>
+            <option>Anxiety</option>
+            <option>Depression</option>
+            <option>PTSD</option>
+            <option>OCD</option>
+            <option>Eating disorders</option>
+            <option>Bipolar disorder</option>
+            <option>ADHD</option>
+            <option>Substance use</option>
+            <option>Stress / Burnout</option>
+            <option>Sleep problems</option>
+            <option>Grief</option>
+            <option>Panic disorder</option>
+            <option>Social anxiety</option>
+            <option>Phobias</option>
+            <option>Relationship issues</option>
+            <option>Trauma</option>
+            <option>Self-harm</option>
+            <option>Suicidal thoughts</option>
+            <option>Psychosis</option>
+            <option>Autism support</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button id="searchBtn" class="btn-search" type="button">Find peer support</button>
+        </div>
+      </div>
+
+      <p class="note">We will show online peer support for your concern and selected university.</p>
+    </section>
+
+    <section class="results-wrap" aria-live="polite">
+      <div class="results-header" id="resultsHeader">
+        <div class="results-count" id="resultsCount"></div>
+      </div>
+      <div id="results" class="cards-grid"></div>
+      <div id="empty" class="empty">No results yet. Choose a university or postcode (either order), select a concern, then click <strong>Find peer support</strong>.</div>
+    </section>
+  </div>
+
+  <!-- Booking modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header>
+        <h3 id="modalTitle">Book online</h3>
+        <button class="close-btn" id="modalClose" aria-label="Close">✕</button>
+      </header>
+      <div id="modalDetails" class="meta" style="margin-bottom:10px;"></div>
+      <div class="grid">
+        <div>
+          <label for="modalDate">Select date</label>
+          <input type="date" id="modalDate">
+        </div>
+        <div>
+          <label for="modalTime">Select time</label>
+          <input type="time" id="modalTime" step="1800" value="10:00">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn-primary" id="modalConfirm">Confirm</button>
+      </div>
+      <div id="modalSuccess" class="meta" style="display:none; margin-top:10px; color:#0b7a2a; font-weight:600;">
+        ✅ Booking saved. See it on the <a href="dashboard.html">Dashboard</a>.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Dropdown menus */
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+    })();
+
+    /* Peer Support logic + per-user booking storage */
+    (function(){
+      // Filter / results / modal refs
+      const countryEl = document.getElementById('country');
+      const cityEl     = document.getElementById('city');
+      const languageEl = document.getElementById('language');
+      const uniEl      = document.getElementById('university');
+      const postcodeEl = document.getElementById('postcode');
+      const concernEl  = document.getElementById('concern');
+      const searchBtn  = document.getElementById('searchBtn');
+      const resultsEl  = document.getElementById('results');
+      const emptyEl    = document.getElementById('empty');
+      const headerEl   = document.getElementById('resultsHeader');
+      const countEl    = document.getElementById('resultsCount');
+
+      const backdrop    = document.getElementById('modalBackdrop');
+      const modalClose  = document.getElementById('modalClose');
+      const modalCancel = document.getElementById('modalCancel');
+      const modalConfirm= document.getElementById('modalConfirm');
+      const modalTitle  = document.getElementById('modalTitle');
+      const modalDetails= document.getElementById('modalDetails');
+      const modalDate   = document.getElementById('modalDate');
+      const modalTime   = document.getElementById('modalTime');
+      const modalSuccess= document.getElementById('modalSuccess');
+
+      // ==== AUTH + STORAGE HELPERS (match dashboard) ====
+      const USER_KEY = 'unimind_user';
+      const BASE_APPT_KEY = 'unimind_appointments';
+
+      function getUserOrRedirect(nextPath = 'peersupport.html'){
+        const u = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+        if (!u) window.location.href = 'login.html?next=' + encodeURIComponent(nextPath);
+        return u;
+      }
+      function getUserApptKey(user){
+        const uid = (user.email || user.id || 'default').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        return `${BASE_APPT_KEY}_${uid}`;
+      }
+      function readAppointments(key){
+        try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+      }
+      function saveAppointments(key, list){
+        localStorage.setItem(key, JSON.stringify(list));
+      }
+      function addAppointment(appt){
+        const user = getUserOrRedirect();
+        if (!user) return;
+        const KEY = getUserApptKey(user);
+        const list = readAppointments(KEY);
+        list.push({ ...appt, createdAt: new Date().toISOString() }); // APPEND
+        saveAppointments(KEY, list);
+        return list.length;
+      }
+
+      // ==== University <-> Postcode pairing
+      const UNI_TO_PC = {
+        "Northbridge University": "B15 3CC",
+        "Riverside College": "B1 1AA",
+        "Kingsford University": "B3 2BB"
+      };
+      const PC_TO_UNI = {
+        "B15 3CC": "Northbridge University",
+        "B1 1AA":  "Riverside College",
+        "B3 2BB":  "Kingsford University"
+      };
+      function onUniversityChange() {
+        const uni = uniEl.value;
+        if (!uni) return;
+        const pc = UNI_TO_PC[uni];
+        if (pc) postcodeEl.value = pc;
+      }
+      function onPostcodeChange() {
+        const pc = postcodeEl.value;
+        if (!pc) return;
+        const uni = PC_TO_UNI[pc];
+        if (uni) uniEl.value = uni;
+      }
+
+      // ==== RNG + test data
+      function seedRand(seed) {
+        let h = 2166136261 >>> 0;
+        for (let i=0;i<seed.length;i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+        return function() {
+          h += 0x6D2B79F5; let t = Math.imul(h ^ (h >>> 15), 1 | h); t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      const facilitatorFirst = ["Taylor","Morgan","Jordan","Casey","Drew","Harper","Riley","Quinn","Avery","Rowan","Bailey","Cameron","Hayden","Parker","Reese","Sydney","Skyler","Alex","Sam","Jamie"];
+      const facilitatorLast  = ["Smith","Jones","Brown","Williams","Wilson","Johnson","Davis","Evans","Thompson","Walker","White","Roberts","Green","Hall","Wood","Clark","Wright","Baker","Adams","Morris"];
+      const roles     = ["Peer Mentor","Wellbeing Ambassador","Support Group Leader","Counselling Society Lead","Student Listener"];
+      const platforms = ["Zoom","MS Teams","Google Meet","Discord"];
+      function pick(arr, rand){ return arr[Math.floor(rand()*arr.length)] }
+      const namePrefixes = ["Hope Circle","Mindful Connections","Resilience Collective","Wellbeing Network","Student Support Hub","Open Ears Group","Calm Minds Crew","Balanced Living Club","Thrive Together","Bright Pathways","Kind Mind Society","Anchor Circle","Unity Peer Space","Recovery Lounge","Growth Guild","Peaceful Minds Forum","Courage Club","Steady Steps Group","Birmingham Wellness Circle","Peer Lift"];
+      const nameStyles = [
+        (p, c) => `${p} – ${c} Support`,
+        (p, c) => `${p}: ${c} Group`,
+        (p, c) => `${c} at ${p}`,
+        (p, c) => `${p} • ${c} Circle`,
+        (p, c) => `${p} for ${c}`,
+      ];
+      function uniqueGroupName(concern, rand, used) {
+        const basePrefix = pick(namePrefixes, rand);
+        const style = nameStyles[Math.floor(rand()*nameStyles.length)];
+        let candidate = style(basePrefix, concern);
+        let bump = 2;
+        while (used.has(candidate)) {
+          const suffixes = [" Plus"," Collective"," Crew"," Hub"," Group"," Circle"];
+          candidate = style(basePrefix + suffixes[Math.floor(rand()*suffixes.length)] + " " + bump, concern);
+          bump++;
+        }
+        used.add(candidate);
+        return candidate;
+      }
+      function generatePeers({city, concern, university, postcode}) {
+        const country  = "United Kingdom";
+        const language = "English";
+        const seed = `PEER|${country}|${city}|${concern}|${language}|${university}|${postcode}`;
+        const rand = seedRand(seed);
+        const usedNames = new Set();
+        const cards = [];
+        for (let i=1;i<=20;i++){
+          const name      = `${pick(facilitatorFirst, rand)} ${pick(facilitatorLast, rand)}`;
+          const role      = pick(roles, rand);
+          const platform  = pick(platforms, rand);
+          const rating    = (Math.floor(rand()*21)+80)/20;
+          const groupName = uniqueGroupName(concern, rand, usedNames);
+
+          cards.push({
+            id: `${i}`,
+            groupName,
+            facilitator: name,
+            role,
+            platform,
+            rating: parseFloat(rating.toFixed(1)),
+            mode: "Online",
+            university,
+            city,
+            concern,
+            language,
+            postcode
+          });
+        }
+        return cards;
+      }
+
+      function sortByRating(cards) { return [...cards].sort((a,b)=> b.rating - a.rating); }
+      function starString(r) {
+        const full = Math.floor(r);
+        const half = (r - full) >= 0.5 ? 1 : 0;
+        const empty = 5 - full - half;
+        return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(empty);
+      }
+
+      function render(cards, university, city, postcode) {
+        resultsEl.innerHTML = "";
+        if (!cards.length) {
+          headerEl.style.display = "none";
+          emptyEl.style.display = "block";
+          return;
+        }
+        headerEl.style.display = "flex";
+        emptyEl.style.display = "none";
+        countEl.textContent = `${cards.length} peer options found (online • at ${university} • Postcode: ${postcode})`;
+
+        const frag = document.createDocumentFragment();
+        cards.forEach(c => {
+          const el = document.createElement("article");
+          el.className = "doc-card";
+          el.innerHTML = `
+            <div class="doc-name">${c.groupName}</div>
+            <div class="doc-meta">${c.role} • Facilitator: ${c.facilitator}</div>
+            <div class="doc-meta">${c.platform} • ${c.mode} • ${c.university}</div>
+            <div class="rating-row">
+              <span class="stars" aria-hidden="true">${starString(c.rating)}</span>
+              <span class="rating-num" aria-label="Rating ${c.rating} out of 5">(${c.rating.toFixed(1)}/5)</span>
+            </div>
+            <div class="badges">
+              <span class="badge">${c.concern}</span>
+              <span class="badge">${c.city}</span>
+              <span class="badge">Postcode: ${c.postcode}</span>
+              <span class="badge">English</span>
+            </div>
+            <div class="doc-actions">
+              <button class="btn-solid book-btn" data-id="${c.id}">Book online</button>
+            </div>
+          `;
+          el.dataset.payload = JSON.stringify(c);
+          frag.appendChild(el);
+        });
+        resultsEl.appendChild(frag);
+
+        // Wire modal open
+        resultsEl.querySelectorAll('.book-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const card = btn.closest('.doc-card');
+            const payload = JSON.parse(card.dataset.payload);
+            openModal(payload);
+          });
+        });
+      }
+
+      // Pairing listeners
+      document.getElementById('university').addEventListener('change', onUniversityChange);
+      document.getElementById('postcode').addEventListener('change', onPostcodeChange);
+
+      // Search flow
+      let currentPeer = null;
+      searchBtn.addEventListener('click', () => {
+        countryEl.value = "United Kingdom";
+        languageEl.value = "English";
+        cityEl.value = "Birmingham";
+
+        if (!uniEl.value && postcodeEl.value) onPostcodeChange();
+        if (uniEl.value && !postcodeEl.value) onUniversityChange();
+        if (uniEl.value && postcodeEl.value && (UNI_TO_PC[uniEl.value] !== postcodeEl.value)) {
+          const fixUni = {"B15 3CC":"Northbridge University","B1 1AA":"Riverside College","B3 2BB":"Kingsford University"}[postcodeEl.value];
+          if (fixUni) uniEl.value = fixUni;
+        }
+
+        const city       = cityEl.value;
+        const university = uniEl.value;
+        const postcode   = postcodeEl.value;
+        const concern    = (concernEl.value || "").trim();
+
+        if (!university || !postcode) {
+          alert("Please choose a university or a postcode (either will auto-fill the other).");
+          return;
+        }
+        if (!concern) {
+          alert("Please choose a mental health concern.");
+          return;
+        }
+
+        const cards = sortByRating(generatePeers({city, concern, university, postcode}));
+        render(cards, university, city, postcode);
+      });
+
+      // Modal open/close and booking
+      function openModal(item) {
+        // Ensure login before booking
+        const u = getUserOrRedirect('peersupport.html');
+        if (!u) return;
+
+        currentPeer = item;
+        const today = new Date().toISOString().split("T")[0];
+        modalDate.min = today;
+        modalDate.value = today;
+        modalTime.value = "10:00";
+        modalSuccess.style.display = "none";
+
+        modalTitle.textContent = `Book online: ${item.groupName}`;
+        modalDetails.innerHTML = `
+          <div><strong>${item.role}</strong> • Facilitator: ${item.facilitator}</div>
+          <div>${item.platform} • ${item.mode}</div>
+          <div>City: ${item.city} • University: ${item.university} • Postcode: ${item.postcode} • Concern: ${item.concern} • Language: English</div>
+        `;
+
+        backdrop.classList.add('open');
+        backdrop.setAttribute('aria-hidden', 'false');
+        modalDate.focus();
+      }
+
+      function closeModal() {
+        backdrop.classList.remove('open');
+        backdrop.setAttribute('aria-hidden', 'true');
+        currentPeer = null;
+      }
+
+      modalClose.addEventListener('click', closeModal);
+      modalCancel.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+      modalConfirm.addEventListener('click', () => {
+        if (!currentPeer) return;
+        const date = modalDate.value;
+        const time = modalTime.value;
+        if (!date || !time) {
+          alert("Please select both a date and time.");
+          return;
+        }
+        const iso = new Date(`${date}T${time}`).toISOString(); // ISO for dashboard sorting
+
+        const appt = {
+          type: "Peer Support",
+          name: currentPeer.groupName,
+          title: `${currentPeer.role} • ${currentPeer.facilitator}`,
+          hospital: "",
+          city: currentPeer.city,
+          mode: currentPeer.mode,
+          concern: currentPeer.concern,
+          postcode: currentPeer.postcode,
+          language: "English",
+          platform: currentPeer.platform,
+          datetime: iso
+        };
+        addAppointment(appt); // APPEND to per-user key
+        modalSuccess.style.display = "block";
+      });
+
+      // Initial render
+      headerEl.style.display = "none";
+      resultsEl.innerHTML = "";
+    })();
+  </script>
+</body>
+</html>

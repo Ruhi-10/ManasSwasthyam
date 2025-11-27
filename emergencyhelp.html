@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Emergency Help</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* // Sets up emergency help page color variables, spacing, and UI theme */
+    :root{
+      --eh-ink:#003366; --eh-ink-2:#001f4d; --eh-sky:#f0f6ff; --eh-sky-2:#b0cff4;
+      --eh-green:#0b7a2a; --eh-amber:#a35500; --eh-red:#a40000;
+      --eh-muted:#4a5a72; --eh-radius:14px; --eh-shadow:0 4px 10px rgba(0,51,102,.10); --eh-shadow-md:0 10px 24px rgba(0,51,102,.14);
+    }
+
+    /* // General layout and typography for the emergency help page */
+    .eh-page{max-width:1100px; margin:0 auto; padding:34px 20px 70px}
+    .eh-title{ color:var(--eh-ink); text-align:center; margin:0 0 8px; font-size:clamp(1.7rem,2.8vw,2.2rem) }
+    .eh-sub{ color:#2a3c55; text-align:center; margin:0 0 18px }
+
+    /* // Styles for the top emergency alert message */
+    .eh-alert{
+      background:#fff6f6; border:1px solid #ffc9c9; color:#5a1212;
+      border-radius:12px; padding:12px 14px; text-align:center; margin-bottom:16px;
+    }
+
+    /* // Grid for quick-access emergency tiles */
+    .eh-tiles{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); margin:18px 0 18px }
+
+    /* // Each individual tile block styling */
+    .eh-tile{
+      background:#fff; border:1px solid var(--eh-sky-2); border-radius:var(--eh-radius); padding:16px; box-shadow:var(--eh-shadow);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .eh-tile h3{margin:0; color:var(--eh-ink); font-size:1.1rem}
+    .eh-tile p{margin:0; color:#3b4a61}
+
+    /* // Buttons inside action tiles and cards */
+    .eh-actions{display:flex; gap:8px; flex-wrap:wrap}
+    .eh-btn{
+      appearance:none; border:1px solid var(--eh-ink); background:var(--eh-ink); color:#fff;
+      padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer; transition:.15s;
+    }
+    .eh-btn:active{transform:translateY(1px)}
+    .eh-btn.secondary{background:#fff; color:var(--eh-ink)}
+    .eh-btn:hover{background:var(--eh-ink-2); border-color:var(--eh-ink-2)}
+    .eh-btn.secondary:hover{background:#e6f0ff}
+    .eh-btn.danger{ background:var(--eh-red); border-color:var(--eh-red) }
+    .eh-btn[disabled]{ opacity:.6; cursor:not-allowed; filter:grayscale(.15) }
+
+    /* // Main content grid separating checklist and sidebar */
+    .eh-grid{display:grid; gap:16px; grid-template-columns:2fr 1fr; align-items:start; margin-top:10px}
+    @media (max-width: 920px){ .eh-grid{grid-template-columns:1fr} }
+
+    /* // Card container styles for each section */
+    .eh-card{
+      background:#fff; border:1px solid var(--eh-sky-2); border-radius:var(--eh-radius); padding:16px; box-shadow:var(--eh-shadow);
+    }
+    .eh-card h2{margin:0 0 8px 0; color:var(--eh-ink); font-size:1.1rem}
+    .eh-muted{color:var(--eh-muted); font-size:.95rem}
+
+    /* // Input fields layout */
+    .eh-row{display:grid; gap:8px; grid-template-columns:1fr 1fr}
+    @media (max-width: 720px){ .eh-row{grid-template-columns:1fr} }
+    .eh-input, .eh-textarea{
+      width:100%; border:1px solid var(--eh-sky-2); border-radius:10px; background:#eaf2ff;
+      padding:10px 12px; resize:vertical; min-height:44px; font-family:inherit; color:var(--eh-ink)
+    }
+
+    /* // Checklist style for safety steps */
+    .eh-list{display:grid; gap:8px; margin-top:6px}
+    .eh-item{display:flex; gap:8px; align-items:flex-start}
+    .eh-item input{margin-top:4px}
+
+    /* // Mini tool sidebar layout */
+    .eh-mini{display:grid; gap:10px}
+
+    /* // Style for location/info note boxes */
+    .eh-note{background:#fff; border:1px dashed var(--eh-sky-2); padding:10px; border-radius:12px; color:#2d3f58}
+
+    /* // Supportive image styling */
+    .eh-bottom-img{ margin-top:26px; text-align:center }
+    .eh-bottom-img img{
+      max-width:100%; height:auto; border-radius:12px; box-shadow:var(--eh-shadow-md);
+    }
+  </style>
+</head>
+<body>
+  <!-- // Navigation bar -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem" aria-current="page">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- // Main emergency help content area -->
+  <main class="eh-page" id="main">
+    <h1 class="eh-title">Emergency Help</h1>
+    <p class="eh-sub">If you’re in immediate danger, please use the emergency numbers below or reach a trusted person.</p>
+
+    <!-- // Top alert reminding user to call local emergency number -->
+    <div class="eh-alert" role="alert">
+      If you are at risk of harming yourself or someone else, call your local emergency number now.
+    </div>
+
+    <!-- // Quick action tiles: numbers, crisis lines, and campus security save -->
+    <section class="eh-tiles" aria-label="Immediate actions">
+      <article class="eh-tile">
+        <h3>Local Emergency Number</h3>
+        <p><b>UK &amp; EU:</b> 999 / 112 &nbsp; • &nbsp; <b>US:</b> 911 &nbsp; • &nbsp; <b>AU:</b> 000</p>
+        <div class="eh-actions">
+          <button class="eh-btn danger" disabled aria-disabled="true">Call 112</button>
+          <button class="eh-btn secondary" disabled aria-disabled="true">Call 999 (UK)</button>
+          <button class="eh-btn secondary" disabled aria-disabled="true">Call 911 (US)</button>
+        </div>
+      </article>
+
+      <article class="eh-tile">
+        <h3>Mental Health Crisis Lines</h3>
+        <p>Speak to someone now.</p>
+        <div class="eh-actions">
+          <button class="eh-btn" disabled aria-disabled="true">Samaritans 116 123 (UK &amp; ROI)</button>
+          <button class="eh-btn" disabled aria-disabled="true">988 Lifeline (US)</button>
+        </div>
+      </article>
+
+      <article class="eh-tile">
+        <h3>Campus / Local Security</h3>
+        <p>Save your campus or building security number.</p>
+        <div class="eh-row">
+          <input class="eh-input" id="custLabel" placeholder="Label (e.g., Campus Security)" />
+          <input class="eh-input" id="custNumber" placeholder="Phone (e.g., +44 20 1234 5678)" />
+        </div>
+        <div class="eh-actions">
+          <button class="eh-btn" id="saveCustom">Save</button>
+          <button class="eh-btn secondary" id="clearCustom">Clear</button>
+          <button class="eh-btn secondary" id="callCustom" disabled aria-disabled="true">Call</button>
+        </div>
+        <small class="eh-muted" id="custStatus">Not saved</small>
+      </article>
+    </section>
+
+    <!-- // Main grid: left shows safety checklist, right shows contacts/tools -->
+    <section class="eh-grid">
+      <div>
+        <!-- // Immediate safety checklist -->
+        <section class="eh-card" aria-labelledby="plan-h2">
+          <h2 id="plan-h2">I’m Not Safe — Do This Now</h2>
+          <div class="eh-list">
+            <label class="eh-item"><input type="checkbox" /> Move to a safer place (a room with people around, away from sharp objects).</label>
+            <label class="eh-item"><input type="checkbox" /> Call an emergency number or a crisis line above.</label>
+            <label class="eh-item"><input type="checkbox" /> Text a trusted person: ask them to come or stay on the phone.</label>
+            <label class="eh-item"><input type="checkbox" /> If indoors, unlock the door so help can enter.</label>
+            <label class="eh-item"><input type="checkbox" /> Breathe slowly; keep your voice and body moving gently.</label>
+          </div>
+        </section>
+
+        <!-- // Supportive image below the checklist -->
+        <div class="eh-bottom-img">
+          <img src="2.jpg" alt="Supportive illustration" />
+        </div>
+      </div>
+
+      <!-- // Sidebar with trusted contacts, location, and crisis message -->
+      <aside class="eh-mini">
+
+        <!-- // Trusted contacts: saves two people locally and can be cleared -->
+        <section class="eh-card" aria-labelledby="trusted-h2">
+          <h2 id="trusted-h2">Trusted Contacts</h2>
+          <p class="eh-muted">Save up to two people (stored only on this device).</p>
+          <div class="eh-row">
+            <input class="eh-input" id="t1Name" placeholder="Name (e.g., Mum)" />
+            <input class="eh-input" id="t1Phone" placeholder="Phone (e.g., +44 7…)" />
+          </div>
+          <div class="eh-row" style="margin-top:6px">
+            <input class="eh-input" id="t2Name" placeholder="Name (e.g., Alex)" />
+            <input class="eh-input" id="t2Phone" placeholder="Phone (e.g., +44 7…)" />
+          </div>
+          <div class="eh-actions" style="margin-top:8px">
+            <button class="eh-btn" id="saveTrusted">Save</button>
+            <button class="eh-btn secondary" id="clearTrusted">Clear</button>
+            <button class="eh-btn secondary" id="callT1" disabled aria-disabled="true">Call</button>
+            <button class="eh-btn secondary" id="callT2" disabled aria-disabled="true">Call</button>
+          </div>
+          <small class="eh-muted" id="trustedStatus">Not saved</small>
+        </section>
+
+        <!-- // Location tools (disabled) -->
+        <section class="eh-card" aria-labelledby="loc-h2">
+          <h2 id="loc-h2">Share My Location</h2>
+          <div class="eh-actions">
+            <button class="eh-btn" id="getLoc" disabled aria-disabled="true">Create map link</button>
+            <button class="eh-btn secondary" id="copyLoc" disabled aria-disabled="true">Copy link</button>
+          </div>
+          <div class="eh-note" id="locOut">No location created yet.</div>
+        </section>
+
+        <!-- // Crisis message: copies a prewritten text to clipboard -->
+        <section class="eh-card" aria-labelledby="sms-h2">
+          <h2 id="sms-h2">Crisis Message</h2>
+          <p class="eh-muted">Copy and send to someone you trust.</p>
+          <textarea id="smsText" class="eh-textarea">Hey — I’m not doing well and could use help. Can you call me and stay with me (phone/text) for a bit? If you can come or send help: I’m at [your location here].</textarea>
+          <div class="eh-actions" style="margin-top:8px">
+            <button class="eh-btn" id="copySms">Copy message</button>
+          </div>
+        </section>
+
+      </aside>
+    </section>
+  </main>
+
+  <!-- // Footer for copyright -->
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function(){
+      // // Handles dropdown navigation open/close behavior
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      // // Local storage key and helper to get elements
+      const STORE_KEY = 'unimind_emergency_v2';
+      const $ = (id)=>document.getElementById(id);
+
+      // // Helpers to load/save entire store from localStorage
+      function load(){
+        try{ return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
+        catch(e){ return {}; }
+      }
+      function save(store){ localStorage.setItem(STORE_KEY, JSON.stringify(store)); }
+
+      // // Custom Campus/Security contact: save, and clear
+      const custLabel=$('custLabel'), custNumber=$('custNumber'),
+            saveCustom=$('saveCustom'), clearCustom=$('clearCustom'),
+            callCustom=$('callCustom'), custStatus=$('custStatus');
+
+      function hydrateCustom(){
+        const store = load();
+        const data = store.custom || null;
+        if(data){
+          custLabel.value = data.label || '';
+          custNumber.value = data.num || '';
+          callCustom.textContent = data.label ? `Call ${data.label}` : 'Call';
+          custStatus.textContent = 'Saved';
+        }else{
+          custLabel.value = '';
+          custNumber.value = '';
+          callCustom.textContent = 'Call';
+          custStatus.textContent = 'Not saved';
+        }
+      }
+
+      saveCustom.addEventListener('click', ()=>{
+        const label = custLabel.value.trim(), num = custNumber.value.trim();
+        if(!label || !num){ custStatus.textContent='Please enter a label and phone number.'; return; }
+        const store = load(); store.custom = {label, num}; save(store);
+        callCustom.textContent = `Call ${label}`;
+        custStatus.textContent='Saved ✓';
+      });
+
+      clearCustom.addEventListener('click', ()=>{
+        const store = load();
+        delete store.custom;
+        save(store);
+        hydrateCustom();
+      });
+
+      // // Trusted contacts (up to two): save, clear, and hydrate UI
+      const t1Name=$('t1Name'), t1Phone=$('t1Phone'),
+            t2Name=$('t2Name'), t2Phone=$('t2Phone'),
+            saveTrusted=$('saveTrusted'), clearTrusted=$('clearTrusted'),
+            callT1=$('callT1'), callT2=$('callT2'),
+            trustedStatus=$('trustedStatus');
+
+      function hydrateTrusted(){
+        const store = load();
+        const t = store.trusted || null;
+        if(t){
+          const a = t.t1 || {}, b = t.t2 || {};
+          t1Name.value = a.name || ''; t1Phone.value = a.phone || '';
+          t2Name.value = b.name || ''; t2Phone.value = b.phone || '';
+          callT1.textContent = a.name ? `Call ${a.name}` : 'Call';
+          callT2.textContent = b.name ? `Call ${b.name}` : 'Call';
+          trustedStatus.textContent = 'Saved';
+        } else {
+          t1Name.value = ''; t1Phone.value = '';
+          t2Name.value = ''; t2Phone.value = '';
+          callT1.textContent = 'Call';
+          callT2.textContent = 'Call';
+          trustedStatus.textContent = 'Not saved';
+        }
+      }
+
+      saveTrusted.addEventListener('click', ()=>{
+        const store = load();
+        store.trusted = {
+          t1:{name: t1Name.value.trim(), phone: t1Phone.value.trim()},
+          t2:{name: t2Name.value.trim(), phone: t2Phone.value.trim()},
+        };
+        save(store);
+        hydrateTrusted();
+        trustedStatus.textContent = 'Saved ✓';
+      });
+
+      clearTrusted.addEventListener('click', ()=>{
+        const store = load();
+        delete store.trusted;
+        save(store);
+        hydrateTrusted();
+      });
+
+      // // Location placeholder (buttons intentionally disabled)
+      const locOut=$('locOut'); if(locOut) locOut.textContent = 'No location created yet.';
+
+      // // Crisis SMS copy-to-clipboard
+      const copySms=$('copySms'), smsText=$('smsText');
+      if(copySms){
+        copySms.addEventListener('click', async ()=>{
+          try{
+            await navigator.clipboard.writeText(smsText.value);
+            copySms.textContent='Copied ✓';
+            setTimeout(()=> copySms.textContent='Copy message', 1200);
+          }catch(e){}
+        });
+      }
+
+      // // Initialize stored data on page load
+      hydrateCustom();
+      hydrateTrusted();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Sets metadata, fonts, and responsive viewport -->
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Understanding Mental Health</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Page-specific styles matching with colour scheme -->
+  <style>
+    :root{
+      --um-ink:#003366; --um-ink-2:#001f4d; --um-sky:#f0f6ff; --um-sky-2:#b0cff4;
+      --um-muted:#4a5a72; --um-radius:14px; --um-shadow:0 6px 16px rgba(0,51,102,.12);
+    }
+
+    body{ background:#ffffff; color:#112233; }
+
+    .um-page{max-width:1100px; margin:0 auto; padding:34px 20px 70px}
+    .um-h1{ color:var(--um-ink); text-align:center; margin:0 0 10px; font-size:clamp(1.8rem,2.8vw,2.3rem)}
+    .um-sub{ color:#395272; text-align:center; margin:0 0 24px}
+
+    .um-grid{display:grid; gap:16px; grid-template-columns:2fr 1fr; align-items:start}
+    @media (max-width: 980px){ .um-grid{grid-template-columns:1fr} }
+
+    .um-card{
+      background:#fff; border:1px solid var(--um-sky-2); border-radius:var(--um-radius); padding:16px;
+      box-shadow:var(--um-shadow);
+    }
+    .um-card h2{margin:0 0 8px; color:var(--um-ink); font-size:1.15rem}
+    .um-muted{color:var(--um-muted)}
+    .um-kicker{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--um-sky-2); background:#fff; color:#365075; font-weight:600}
+
+    .um-section{display:grid; gap:14px}
+    .um-lead{font-size:1.05rem; color:#2e4664}
+
+    .um-list{display:grid; gap:8px}
+    .um-li{background:#f7fbff; border:1px solid var(--um-sky-2); border-radius:10px; padding:10px}
+
+    .um-flex{display:flex; gap:10px; flex-wrap:wrap}
+    .um-btn{
+      appearance:none; border:1px solid var(--um-ink); background:var(--um-ink); color:#fff;
+      padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer; transition:.15s;
+    }
+    .um-btn:hover{background:var(--um-ink-2); border-color:var(--um-ink-2)}
+    .um-btn.secondary{background:#fff; color:var(--um-ink)}
+    .um-btn.secondary:hover{background:#e6f0ff}
+    .um-pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--um-sky-2); background:#fff; color:#3a4b63}
+
+    .um-facts{
+      display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    }
+    .um-flip{ perspective:1000px; height:160px; }
+    .um-flip-inner{
+      position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;
+      border:1px solid var(--um-sky-2); border-radius:12px; box-shadow:var(--um-shadow); background:#fff;
+      cursor:pointer;
+    }
+    .um-flip.is-flipped .um-flip-inner{ transform: rotateY(180deg); }
+    .um-face{
+      position:absolute; inset:0; display:grid; place-items:center; padding:14px; border-radius:12px; backface-visibility:hidden;
+      color:#2c4361; text-align:center;
+    }
+    .um-face.front{ background:#f7fbff }
+    .um-face.back{ transform: rotateY(180deg); background:#ffffff }
+
+    .um-accordion{display:grid; gap:10px}
+    .um-acc-item{border:1px solid var(--um-sky-2); border-radius:12px; background:#fff; box-shadow:var(--um-shadow)}
+    .um-acc-h{
+      width:100%; text-align:left; padding:12px 14px; background:#fff; border:none; border-radius:12px;
+      font-weight:700; color:var(--um-ink); cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+    }
+    .um-acc-h .caret{transition:transform .2s}
+    .um-acc-h[aria-expanded="true"] .caret{ transform: rotate(180deg); }
+    .um-acc-p{ padding:0 14px 14px; color:#2f4968; display:none }
+    .um-acc-p.show{ display:block }
+
+    .um-aside{display:grid; gap:12px}
+    .um-tip{background:#fff; border:1px solid var(--um-sky-2); border-radius:12px; padding:14px; box-shadow:var(--um-shadow)}
+    .um-dyk{background:#fafcff; border:1px dashed var(--um-sky-2); border-radius:12px; padding:12px; color:#2b4564}
+
+    .um-footer-note{margin-top:16px; text-align:center; color:#38506b; font-size:.95rem}
+  </style>
+</head>
+<body>
+
+  <!--navigation with dropdown menus -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem" aria-current="page">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Page title and short intro -->
+  <main class="um-page">
+    <h1 class="um-h1">Understanding Mental Health</h1>
+    <p class="um-sub">A friendly guide to what mental health means, why it matters, and simple ways to look after it as a university student.</p>
+
+    <!-- Two-column layout: main content + sidebar -->
+    <section class="um-grid">
+      <!-- Main educational content -->
+      <div class="um-section">
+        <!-- Core definition of mental health -->
+        <article class="um-card">
+          <span class="um-kicker">Overview</span>
+          <h2>What is mental health?</h2>
+          <p class="um-lead">Mental health is how a person thinks, feels, and acts. It affects how they handle stress, relate to others, make decisions, and enjoy life. Just like physical health, mental health changes over time and can be strengthened with care and support.</p>
+          <div class="um-list">
+            <div class="um-li"><b>Mood:</b> feelings like calm, stress, sadness, joy, or worry.</div>
+            <div class="um-li"><b>Thoughts:</b> the stories the mind tells about events and oneself.</div>
+            <div class="um-li"><b>Behaviours:</b> choices and habits that can help or harm wellbeing.</div>
+          </div>
+        </article>
+
+        <!-- Why mental health matters in university life -->
+        <article class="um-card">
+          <span class="um-kicker">Why it matters</span>
+          <h2>Mental health and university life</h2>
+          <p class="um-lead">University life can be exciting and intense. Coursework, finances, friendships, and big life changes can all add pressure. Paying attention to mental health helps with focus, motivation, relationships, sleep, and overall quality of life.</p>
+          <div class="um-list">
+            <div class="um-li"><b>Performance:</b> healthy routines support memory, energy, and planning.</div>
+            <div class="um-li"><b>Connection:</b> feeling supported makes it easier to ask for help and set boundaries.</div>
+            <div class="um-li"><b>Resilience:</b> small habits build capacity to handle setbacks and uncertainty.</div>
+          </div>
+        </article>
+
+        <!-- Common challenges for university students -->
+        <article class="um-card">
+          <span class="um-kicker">Common experiences</span>
+          <h2>What university students often face</h2>
+          <div class="um-list">
+            <div class="um-li"><b>Stress and burnout:</b> back-to-back deadlines, part-time work, and poor sleep add up.</div>
+            <div class="um-li"><b>Anxiety:</b> worry about grades, future, or social situations.</div>
+            <div class="um-li"><b>Low mood:</b> homesickness, winter blues, or longer periods of feeling down.</div>
+            <div class="um-li"><b>Perfectionism:</b> setting impossible standards and feeling like nothing is “good enough.”</div>
+          </div>
+        </article>
+
+        <!-- Interactive myths vs facts flip cards -->
+        <article class="um-card">
+          <span class="um-kicker">Myths vs Facts</span>
+          <h2>Tap a card to flip</h2>
+          <div class="um-facts" id="mythGrid">
+            <div class="um-flip" tabindex="0" aria-label="Myth vs fact card">
+              <div class="um-flip-inner">
+                <div class="um-face front"><b>Myth:</b> “Asking for help is a sign of weakness.”</div>
+                <div class="um-face back"><b>Fact:</b> Reaching out is a skill. University students who seek support often recover faster.</div>
+              </div>
+            </div>
+            <div class="um-flip" tabindex="0" aria-label="Myth vs fact card">
+              <div class="um-flip-inner">
+                <div class="um-face front"><b>Myth:</b> “You can just snap out of it.”</div>
+                <div class="um-face back"><b>Fact:</b> Mental health shifts are real. Care, tools, and time make a difference.</div>
+              </div>
+            </div>
+            <div class="um-flip" tabindex="0" aria-label="Myth vs fact card">
+              <div class="um-flip-inner">
+                <div class="um-face front"><b>Myth:</b> “Only some people have mental health.”</div>
+                <div class="um-face back"><b>Fact:</b> Everyone has mental health—just like physical health.</div>
+              </div>
+            </div>
+            <div class="um-flip" tabindex="0" aria-label="Myth vs fact card">
+              <div class="um-flip-inner">
+                <div class="um-face front"><b>Myth:</b> “Talking about it makes it worse.”</div>
+                <div class="um-face back"><b>Fact:</b> Supportive conversations reduce shame and help people feel less alone.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Signs to seek help and quick next steps -->
+        <article class="um-card">
+          <span class="um-kicker">When to seek help</span>
+          <h2>Signals to pay attention to</h2>
+          <p class="um-lead">Extra support is a smart choice if something feels off for more than a couple of weeks, or it’s affecting study, relationships, or safety.</p>
+          <div class="um-list">
+            <div class="um-li">Sleep shifts a lot, or energy is always low.</div>
+            <div class="um-li">Worry or sadness is constant, or mood swings feel unmanageable.</div>
+            <div class="um-li">Withdrawing from friends, skipping classes, or losing interest in usual activities.</div>
+            <div class="um-li">Using alcohol or substances to cope.</div>
+            <div class="um-li">Thoughts of harming oneself or not wanting to be here.</div>
+          </div>
+          <div class="um-flex" style="margin-top:8px">
+            <a class="um-btn secondary" href="peersupport.html">Peer support</a>
+            <a class="um-btn secondary" href="finddoctors.html">Find a clinician</a>
+            <a class="um-btn" href="emergencyhelp.html">Emergency help</a>
+          </div>
+        </article>
+
+        <!-- Practical self-care tips -->
+        <article class="um-card">
+          <span class="um-kicker">Self-care basics</span>
+          <h2>Small habits that add up</h2>
+          <div class="um-accordion" id="tips">
+            <div class="um-acc-item">
+              <button class="um-acc-h" aria-expanded="false">Sleep and rhythm <span class="caret">▾</span></button>
+              <div class="um-acc-p">Aim for a regular sleep window. Keep wake time steady if possible. Morning light, less caffeine late in the day, and a gentle wind-down routine all help.</div>
+            </div>
+            <div class="um-acc-item">
+              <button class="um-acc-h" aria-expanded="false">Move the body <span class="caret">▾</span></button>
+              <div class="um-acc-p">Short walks, stretching, or gym sessions can ease stress and boost mood. Choose something doable and enjoyable.</div>
+            </div>
+            <div class="um-acc-item">
+              <button class="um-acc-h" aria-expanded="false">Connect regularly <span class="caret">▾</span></button>
+              <div class="um-acc-p">Schedule low-pressure time with people who feel safe—coffee, study co-working, clubs, or call a friend.</div>
+            </div>
+            <div class="um-acc-item">
+              <button class="um-acc-h" aria-expanded="false">Kind self-talk <span class="caret">▾</span></button>
+              <div class="um-acc-p">Notice harsh thoughts and try a kinder alternative: “I’m learning,” “I can ask for help,” or “This doesn’t define me.”</div>
+            </div>
+            <div class="um-acc-item">
+              <button class="um-acc-h" aria-expanded="false">Break tasks into steps <span class="caret">▾</span></button>
+              <div class="um-acc-p">Use tiny starts: 5–10 minutes, one paragraph, one email. Celebrate small wins to build momentum.</div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Sidebar with extras -->
+      <aside class="um-aside">
+        <!-- Random helpful fact with button -->
+        <div class="um-tip">
+          <h2 style="margin:0 0 6px; color:var(--um-ink); font-size:1.05rem">Did you know?</h2>
+          <div class="um-dyk" id="dykBox">Click the button to see a quick fact.</div>
+          <div class="um-flex" style="margin-top:8px">
+            <button class="um-btn" id="dykBtn">Show another fact</button>
+            <span class="um-pill" id="dykStatus" aria-live="polite">Ready</span>
+          </div>
+        </div>
+
+        <!-- Simple daily wellbeing checklist -->
+        <div class="um-tip">
+          <h2 style="margin:0 0 6px; color:var(--um-ink); font-size:1.05rem">Quick checklist</h2>
+          <div class="um-list">
+            <label class="um-li"><input type="checkbox" /> Slept 7–9 hours in the past day</label>
+            <label class="um-li"><input type="checkbox" /> Ate a balanced meal and hydrated</label>
+            <label class="um-li"><input type="checkbox" /> Moved the body for 10+ minutes</label>
+            <label class="um-li"><input type="checkbox" /> Messaged or spoke to someone supportive</label>
+            <label class="um-li"><input type="checkbox" /> Stepped away from screens for a short break</label>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Safety reminder with link to emergency page -->
+    <p class="um-footer-note">If there’s risk of harm to oneself or others, use an emergency number or visit the <a href="emergencyhelp.html">Emergency help</a> page.</p>
+  </main>
+
+  <!-- Site-wide footer -->
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <!-- Behaviour for dropdowns, flip cards, accordion, and random facts -->
+  <script>
+    (function(){
+      // Navbar dropdown behaviour
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      // Flip cards: click/keyboard toggles
+      const mythGrid = document.getElementById('mythGrid');
+      if(mythGrid){
+        mythGrid.addEventListener('click', (e)=>{
+          const card = e.target.closest('.um-flip');
+          if(!card) return;
+          card.classList.toggle('is-flipped');
+        });
+        mythGrid.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){
+            const card = e.target.closest('.um-flip');
+            if(!card) return;
+            e.preventDefault();
+            card.classList.toggle('is-flipped');
+          }
+        });
+      }
+
+      // expand/collapse panels
+      const tips = document.getElementById('tips');
+      if(tips){
+        tips.addEventListener('click', (e)=>{
+          const btn = e.target.closest('.um-acc-h');
+          if(!btn) return;
+          const panel = btn.parentElement.querySelector('.um-acc-p');
+          const isOpen = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!isOpen));
+          panel.classList.toggle('show', !isOpen);
+        });
+      }
+
+      // Random fact generator
+      const facts = [
+        'Short walks can lower stress hormones within minutes.',
+        'Regular sleep and wake times help mood more than total hours alone.',
+        'Talking to one supportive person is linked to better mental health for university students.',
+        'Perfection isn’t required—small consistent steps create change.',
+        'Breathing slowly can signal safety to the nervous system.',
+        'Gratitude notes, even brief ones, can boost mood over time.',
+        'Boundaries protect energy and make room for what matters during university.',
+        'Naming a feeling often makes it feel more manageable.',
+      ];
+      const dykBox = document.getElementById('dykBox');
+      const dykBtn = document.getElementById('dykBtn');
+      const dykStatus = document.getElementById('dykStatus');
+
+      function showRandomFact(){
+        const pick = facts[Math.floor(Math.random()*facts.length)];
+        dykBox.textContent = pick;
+        if(dykStatus){ dykStatus.textContent = 'Updated'; setTimeout(()=> dykStatus.textContent='Ready', 1000); }
+      }
+      if(dykBtn){ dykBtn.addEventListener('click', showRandomFact); showRandomFact(); }
+    })();
+  </script>
+</body>
+</html>

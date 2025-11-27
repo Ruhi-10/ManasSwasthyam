@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Self-Assessment Quizzes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Theme + Fonts as it uses CSS + tokens-->
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!--scoped styles -->
+  <style>
+    /*Self-Assessment*/
+    .sa-page{max-width:1100px; margin:0 auto; padding:40px 16px 80px}
+    .sa-title{color:var(--blue-800); font-weight:700; font-size:clamp(22px,3.2vw,32px)}
+    .sa-lead{color:#4a5a72; margin-top:8px; max-width:70ch}
+
+    .sa-quiz{
+      margin-top:18px; background:#fff; border:1px solid var(--blue-300);
+      border-radius:14px; box-shadow:0 6px 14px rgba(0,51,102,.10); overflow:hidden;
+    }
+    .sa-bar{height:10px; background:linear-gradient(90deg, var(--blue-800), #2a64b6); width:0%}
+    .sa-head{padding:18px 18px 8px}
+    .sa-meta{display:flex; align-items:center; justify-content:space-between; gap:12px; color:#4a5a72}
+    .sa-steps{display:flex; gap:6px}
+    .sa-dot{width:10px; height:10px; border-radius:999px; background:#c9dbf8; opacity:.7}
+    .sa-dot.is-active{background:#2a64b6; opacity:1}
+    .sa-body{padding:6px 18px 18px}
+
+    /* Light blue question cards */
+    .sa-card{
+      display:none;
+      background: var(--blue-050);
+      border:1px solid var(--blue-300);
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 6px 14px rgba(0,51,102,.10);
+      margin:14px 0;
+    }
+    .sa-card.is-current{display:block}
+    .sa-num{font-weight:700; color:var(--blue-900); margin-bottom:6px}
+    .sa-text{font-size:18px; line-height:1.4; margin-bottom:14px; color:var(--blue-900)}
+
+    .sa-options{display:grid; gap:10px}
+    .sa-opt{
+      display:flex; align-items:flex-start; gap:10px; padding:12px 12px;
+      border:1px solid #e3edff; border-radius:12px; cursor:pointer;
+      transition:.15s transform ease, .15s box-shadow ease, .15s border-color ease;
+      background:#fff;
+    }
+    .sa-opt:hover{transform:translateY(-1px); box-shadow:0 6px 14px rgba(0,51,102,.10)}
+    .sa-opt input{accent-color:#2a64b6; transform:translateY(2px)}
+    .sa-opt strong{color:#0f2d66}
+
+    .sa-controls{display:flex; gap:10px; justify-content:space-between; margin-top:8px; flex-wrap:wrap}
+    .sa-btn{
+      appearance:none; border:0; background:#2a64b6; color:#fff; font-weight:600;
+      padding:12px 16px; border-radius:12px; cursor:pointer; box-shadow:0 6px 14px rgba(0,51,102,.10);
+    }
+    .sa-btn:disabled{opacity:.55; cursor:not-allowed}
+    .sa-btn.alt{background:var(--blue-100); color:#0f2d66; border:1px solid var(--blue-300)}
+    .sa-btn.ghost{background:#fff; color:#0f2d66; border:1px solid var(--blue-300)}
+
+    .sa-helper{
+      color:#7a1c1c; background:#fff5f5; border:1px solid #ffd0d0;
+      padding:10px 12px; border-radius:10px; display:none; margin:6px 0
+    }
+    .sa-helper.show{display:block}
+
+    .sa-result{
+      display:none; padding:22px; border-radius:14px; border:1px solid #d8e6fb;
+      background:linear-gradient(180deg,#f7fbff,#ffffff); box-shadow:0 16px 36px rgba(0,51,102,.14); margin-top:12px;
+    }
+    .sa-result .score{font-size:28px; font-weight:700; color:var(--blue-800)}
+    .sa-badge{display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; margin-left:8px}
+    .sa-badge.ok{background:#e6f6ea; color:#0b7a2a}
+    .sa-badge.mod{background:#fff4e6; color:#a35500}
+    .sa-badge.high{background:#ffecec; color:#a40000}
+    .sa-rec{margin-top:10px; color:#0f2d66}
+    .sa-rec ul{margin:8px 0 0 18px}
+
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  </style>
+</head>
+<body>
+
+  <!--NAV-->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam&nbsp;&nbsp;&nbsp;</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem" aria-current="page">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!--PAGE CONTENT-->
+  <main>
+    <section class="sa-page">
+      <h1 class="sa-title">Self-Assessment Quiz</h1>
+      <p class="sa-lead">Answer each question based on how you’ve been feeling over the last two weeks. This isn’t a diagnosis, but it can help you reflect and decide next steps.</p>
+
+      <section class="sa-quiz" id="quiz" aria-label="Self-assessment quiz">
+        <div class="sa-bar" id="saBar" aria-hidden="true"></div>
+        <div class="sa-head">
+          <div class="sa-meta">
+            <div id="saProgress">Question 1 of 10</div>
+            <div class="sa-steps" id="saSteps" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="sa-body">
+          <div id="saHelper" class="sa-helper">Please choose an option to continue.</div>
+
+          <form id="saForm" autocomplete="off">
+            <!-- Q1 -->
+            <div class="sa-card is-current" data-index="0">
+              <div class="sa-num">Q1</div>
+              <div class="sa-text">Feeling less motivated or not enjoying usual activities</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Motivation and enjoyment">
+                <label class="sa-opt"><input type="radio" name="q0" value="0"><strong>I’ve been engaged and enjoying most things</strong></label>
+                <label class="sa-opt"><input type="radio" name="q0" value="1"><strong>Some days I’m less motivated, but it passes</strong></label>
+                <label class="sa-opt"><input type="radio" name="q0" value="2"><strong>I’ve often struggled to enjoy things</strong></label>
+                <label class="sa-opt"><input type="radio" name="q0" value="3"><strong>I’ve barely enjoyed anything lately</strong></label>
+              </fieldset>
+            </div>
+
+            <!-- Q2 -->
+            <div class="sa-card" data-index="1">
+              <div class="sa-num">Q2</div>
+              <div class="sa-text">Feeling down, low, or hopeless</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Low mood and hopelessness">
+                <label class="sa-opt"><input type="radio" name="q1" value="0">I’ve generally felt positive</label>
+                <label class="sa-opt"><input type="radio" name="q1" value="1">I’ve had occasional dips in mood</label>
+                <label class="sa-opt"><input type="radio" name="q1" value="2">I’ve felt low quite often</label>
+                <label class="sa-opt"><input type="radio" name="q1" value="3">I’ve felt hopeless most of the time</label>
+              </fieldset>
+            </div>
+
+            <!-- Q3 -->
+            <div class="sa-card" data-index="2">
+              <div class="sa-num">Q3</div>
+              <div class="sa-text">Feeling tense, nervous, or unable to relax</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Tension and relaxation">
+                <label class="sa-opt"><input type="radio" name="q2" value="0">Mostly calm and relaxed</label>
+                <label class="sa-opt"><input type="radio" name="q2" value="1">A little on edge now and then</label>
+                <label class="sa-opt"><input type="radio" name="q2" value="2">Tense more often than not</label>
+                <label class="sa-opt"><input type="radio" name="q2" value="3">Constantly anxious or restless</label>
+              </fieldset>
+            </div>
+
+            <!-- Q4 -->
+            <div class="sa-card" data-index="3">
+              <div class="sa-num">Q4</div>
+              <div class="sa-text">Worry making it hard to focus</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Worry and focus">
+                <label class="sa-opt"><input type="radio" name="q3" value="0">My mind has felt clear and focused</label>
+                <label class="sa-opt"><input type="radio" name="q3" value="1">Some distracted moments</label>
+                <label class="sa-opt"><input type="radio" name="q3" value="2">Worry often makes it hard to focus</label>
+                <label class="sa-opt"><input type="radio" name="q3" value="3">I can’t focus due to constant worry</label>
+              </fieldset>
+            </div>
+
+            <!-- Q5 -->
+            <div class="sa-card" data-index="4">
+              <div class="sa-num">Q5</div>
+              <div class="sa-text">Restlessness or fidgetiness</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Restlessness">
+                <label class="sa-opt"><input type="radio" name="q4" value="0">Physically relaxed</label>
+                <label class="sa-opt"><input type="radio" name="q4" value="1">A little restless at times</label>
+                <label class="sa-opt"><input type="radio" name="q4" value="2">Restless more than I’d like</label>
+                <label class="sa-opt"><input type="radio" name="q4" value="3">Unable to stay still most of the time</label>
+              </fieldset>
+            </div>
+
+            <!-- Q6 -->
+            <div class="sa-card" data-index="5">
+              <div class="sa-num">Q6</div>
+              <div class="sa-text">Feeling tired or low energy</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Energy levels">
+                <label class="sa-opt"><input type="radio" name="q5" value="0">Plenty of energy</label>
+                <label class="sa-opt"><input type="radio" name="q5" value="1">Some low-energy days</label>
+                <label class="sa-opt"><input type="radio" name="q5" value="2">Often drained or tired</label>
+                <label class="sa-opt"><input type="radio" name="q5" value="3">Very little energy at all</label>
+              </fieldset>
+            </div>
+
+            <!-- Q7 -->
+            <div class="sa-card" data-index="6">
+              <div class="sa-num">Q7</div>
+              <div class="sa-text">Sleep difficulties</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Sleep">
+                <label class="sa-opt"><input type="radio" name="q6" value="0">Restful and consistent sleep</label>
+                <label class="sa-opt"><input type="radio" name="q6" value="1">Occasional poor nights</label>
+                <label class="sa-opt"><input type="radio" name="q6" value="2">Frequent sleep problems</label>
+                <label class="sa-opt"><input type="radio" name="q6" value="3">Poor sleep nearly every night</label>
+              </fieldset>
+            </div>
+
+            <!-- Q8 -->
+            <div class="sa-card" data-index="7">
+              <div class="sa-num">Q8</div>
+              <div class="sa-text">Appetite changes</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Appetite">
+                <label class="sa-opt"><input type="radio" name="q7" value="0">Appetite steady</label>
+                <label class="sa-opt"><input type="radio" name="q7" value="1">Small changes</label>
+                <label class="sa-opt"><input type="radio" name="q7" value="2">Quite a lot of change</label>
+                <label class="sa-opt"><input type="radio" name="q7" value="3">Major changes nearly every day</label>
+              </fieldset>
+            </div>
+
+            <!-- Q9 -->
+            <div class="sa-card" data-index="8">
+              <div class="sa-num">Q9</div>
+              <div class="sa-text">Difficulty concentrating</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Concentration">
+                <label class="sa-opt"><input type="radio" name="q8" value="0">Able to focus well</label>
+                <label class="sa-opt"><input type="radio" name="q8" value="1">A few distracted moments</label>
+                <label class="sa-opt"><input type="radio" name="q8" value="2">Often hard to focus</label>
+                <label class="sa-opt"><input type="radio" name="q8" value="3">Unable to focus most of the time</label>
+              </fieldset>
+            </div>
+
+            <!-- Q10 -->
+            <div class="sa-card" data-index="9">
+              <div class="sa-num">Q10</div>
+              <div class="sa-text">Being overly critical of yourself</div>
+              <fieldset class="sa-options" role="radiogroup" aria-label="Self-criticism">
+                <label class="sa-opt"><input type="radio" name="q9" value="0">I’ve felt confident in myself</label>
+                <label class="sa-opt"><input type="radio" name="q9" value="1">Some self-doubt</label>
+                <label class="sa-opt"><input type="radio" name="q9" value="2">Quite self-critical often</label>
+                <label class="sa-opt"><input type="radio" name="q9" value="3">Hard on myself almost constantly</label>
+              </fieldset>
+            </div>
+          </form>
+
+          <div class="sa-controls">
+            <button class="sa-btn ghost" id="saPrev" type="button" aria-label="Previous question">← Back</button>
+            <div style="display:flex; gap:8px;">
+              <button class="sa-btn alt" id="saReset" type="button">Reset</button>
+              <button class="sa-btn" id="saNext" type="button">Next →</button>
+              <button class="sa-btn" id="saFinish" type="button" style="display:none">See Results</button>
+            </div>
+          </div>
+
+          <article class="sa-result" id="saResult" aria-live="polite">
+            <div class="score" id="saScore">Your score: 0/10</div>
+            <div class="sa-rec" id="saLevel"></div>
+            <div class="sa-rec">
+              <p><strong>What could help next?</strong></p>
+              <ul id="saAdvice"></ul>
+              <p class="hint">If you're in immediate danger or thinking about harming yourself, please use your Emergency Help page or local emergency number.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- FOOTER-->
+  <footer class="footer">
+    <p>© <span id="year"></span> ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts: dropdowns + quiz -->
+  <script>
+    (function(){
+      // Dropdown menus (the classes)
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except){
+        dropdowns.forEach(li=>{
+          if (li !== except){ li.classList.remove('open'); li.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded','false'); }
+        });
+      }
+      dropdowns.forEach(li=>{
+        const btn = li.querySelector('.dropdown-toggle');
+        if(!btn) return;
+        btn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const opening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', opening);
+          btn.setAttribute('aria-expanded', String(opening));
+        });
+      });
+      document.addEventListener('click', ()=>closeAll(null));
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeAll(null); });
+
+      // Footer year
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+
+    //Quiz logic
+    (function(){
+      const TOTAL = 10;               // 10 questions
+      const MAX_RAW = 30;             // 0–3 per question -> 30 max
+      const form = document.getElementById('saForm');
+      const cards = [...document.querySelectorAll('.sa-card')];
+      const helper = document.getElementById('saHelper');
+      const prevBtn = document.getElementById('saPrev');
+      const nextBtn = document.getElementById('saNext');
+      const finishBtn = document.getElementById('saFinish');
+      const bar = document.getElementById('saBar');
+      const progress = document.getElementById('saProgress');
+      const steps = document.getElementById('saSteps');
+      const result = document.getElementById('saResult');
+      const scoreEl = document.getElementById('saScore');
+      const levelEl = document.getElementById('saLevel');
+      const adviceEl = document.getElementById('saAdvice');
+      const resetBtn = document.getElementById('saReset');
+
+      let current = 0;
+
+      // Step dots
+      steps.innerHTML = Array.from({length: TOTAL}, (_,i)=>`<span class="sa-dot${i===0?' is-active':''}"></span>`).join('');
+
+      const getAnswer = (i) => {
+        const field = form.querySelector(`[name="q${i}"]:checked`);
+        return field ? Number(field.value) : null;
+        // values are 0–3
+      };
+
+      const updateUI = () => {
+        cards.forEach((c,i)=>c.classList.toggle('is-current', i===current));
+        [...steps.children].forEach((d,i)=>d.classList.toggle('is-active', i<=current));
+        const pct = Math.round((current / TOTAL) * 100);
+        bar.style.width = Math.max(4, pct) + '%';
+        progress.textContent = `Question ${current+1} of ${TOTAL}`;
+        helper.classList.toggle('show', getAnswer(current) === null);
+        prevBtn.disabled = current===0;
+        nextBtn.style.display = current < TOTAL-1 ? 'inline-block' : 'none';
+        finishBtn.style.display = current === TOTAL-1 ? 'inline-block' : 'none';
+      };
+
+      const validateCurrent = () => {
+        if (getAnswer(current) === null){
+          helper.classList.add('show');
+          cards[current].querySelector('input[type="radio"]')?.focus();
+          return false;
+        }
+        helper.classList.remove('show');
+        return true;
+      };
+
+      nextBtn.addEventListener('click', ()=>{
+        if (!validateCurrent()) return;
+        if (current < TOTAL-1){ current++; updateUI(); }
+      });
+
+      prevBtn.addEventListener('click', ()=>{
+        current = Math.max(0, current-1);
+        updateUI();
+      });
+
+      finishBtn.addEventListener('click', ()=>{
+        if (!validateCurrent()) return;
+        // Raw 0–30
+        const raw = Array.from({length: TOTAL}, (_,i)=>getAnswer(i) ?? 0).reduce((a,b)=>a+b,0);
+        // Scale to 0–10 (integer)
+        const score10 = Math.round((raw / MAX_RAW) * 10);
+        scoreEl.textContent = `Your score: ${score10}/10`;
+
+        // Levels adapted to /10
+        const level = score10 <= 3 ? 'Low' : (score10 <= 6 ? 'Moderate' : 'High');
+
+        let badge = '', advice = [];
+        if (level === 'Low'){
+          badge = '<span class="sa-badge ok">Low</span>';
+          advice = [
+            'Keep up your routines (sleep, meals, movement).',
+            'Use Self-Guided Support tools (breathing, journaling).',
+            'Stay connected with friends or peer support.'
+          ];
+        } else if (level === 'Moderate'){
+          badge = '<span class="sa-badge mod">Moderate</span>';
+          advice = [
+            'Try 1–2 structured self-help tools consistently.',
+            'Consider speaking with your GP or university wellbeing service.',
+            'Reduce overload: plan small, manageable tasks.'
+          ];
+        } else {
+          badge = '<span class="sa-badge high">High</span>';
+          advice = [
+            'Please reach out to a professional service as soon as possible.',
+            'Tell someone you trust today and ask for support.',
+            'If you feel at risk, use Emergency Help or your local emergency number.'
+          ];
+        }
+        levelEl.innerHTML = `Overall level: <strong>${level}</strong> ${badge}`;
+        adviceEl.innerHTML = advice.map(a=>`<li>${a}</li>`).join('');
+        result.style.display = 'block';
+        result.scrollIntoView({behavior:'smooth', block:'center'});
+      });
+
+      form.addEventListener('change', (e)=>{
+        if (e.target.matches('input[type="radio"]')) helper.classList.remove('show');
+      });
+
+      resetBtn.addEventListener('click', ()=>{
+        form.reset(); current = 0; result.style.display = 'none'; updateUI();
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+
+      // Enter = advance
+      document.addEventListener('keydown', (e)=>{
+        if (e.key === 'Enter'){
+          const tag = document.activeElement?.tagName?.toLowerCase();
+          if (tag !== 'button'){ e.preventDefault(); (current === TOTAL-1 ? finishBtn : nextBtn).click(); }
+        }
+      });
+
+      updateUI();
+    })();
+  </script>
+</body>
+</html>

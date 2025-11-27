@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- This sets the character encoding for the document -->
+  <meta charset="UTF-8" />
+
+  <!-- This is the title that appears in the browser tab -->
+  <title>ManasSwasthayam | Your Mental Wellness Companion</title>
+
+  <!-- This links the main stylesheet for the website -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- This links the Inter font from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- This makes the page responsive on all devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+
+  <!-- This is the main navigation bar -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam&nbsp;&nbsp;&nbsp;</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <!-- This is the dropdown for support services -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <!-- This is the dropdown for useful resources -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="#" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <!-- This is the dropdown for wellness tools -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <!-- These are other main links -->
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      
+
+      <!-- This is the dropdown for register -->
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <!-- This is the about us link -->
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- This is the hero section with background image set in CSS -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Welcome to ManasSwasthayam</h1>
+      <p>A gentle space to breathe, reconnect and feel lighter</p>
+      <a href="signup.html" class="btn-primary">Sign up</a>
+    </div>
+  </section>
+
+  <!-- This is the features section -->
+  <section class="features">
+    <h2>These Are Our Best Features Yet</h2>
+    <div class="feature-cards">
+
+      <!-- This is the find support feature -->
+      <div class="card">
+        <h3>Find Support</h3>
+        <p>Access local therapists and emergency help tailored to university students.</p>
+      </div>
+
+      <!-- This is the wellness tools feature -->
+      <div class="card">
+        <h3>Wellness Tools</h3>
+        <p>Track your mood, set wellness goals, and build healthy habits.</p>
+      </div>
+
+      <!-- This is the peer communities feature -->
+      <div class="card">
+        <h3>Peer Communities</h3>
+        <p>Join peer support groups and student-led forums for shared experiences.</p>
+      </div>
+
+      <!-- This is the workshops and webinars feature -->
+      <div class="card">
+        <h3>Workshops &amp; Webinars</h3>
+        <p>Attend expert-led sessions to build skills and learn strategies.</p>
+      </div>
+
+    </div>
+    <br/>
+    <a href="signup.html" class="register-call">Register now to unlock full access!</a>
+  </section>
+
+  <!-- This is the footer section -->
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <!-- This is the cookie banner -->
+  <div class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie notice">
+    <div class="cookie-text">
+      We use essential cookies to keep ManasSwasthayam running and improve your experience. By continuing, you agree to our cookie use.
+      <a href="" class="cookie-link">Learn more</a>
+    </div>
+    <button class="cookie-btn" id="cookie-accept">OK</button>
+  </div>
+
+  <!-- This is the script for dropdown menus and cookies -->
+  <script>
+    (function(){
+      // This controls the dropdown menus
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      if (dropdowns.length) {
+        function closeAll(except) {
+          dropdowns.forEach(li => {
+            if (li !== except) {
+              li.classList.remove('open');
+              const btn = li.querySelector('.dropdown-toggle');
+              if (btn) btn.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+
+        dropdowns.forEach(li => {
+          const btn = li.querySelector('.dropdown-toggle');
+          if (!btn) return;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpening = !li.classList.contains('open');
+            closeAll(li);
+            li.classList.toggle('open', isOpening);
+            btn.setAttribute('aria-expanded', String(isOpening));
+          });
+        });
+
+        document.addEventListener('click', () => closeAll(null));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') closeAll(null);
+        });
+      }
+
+      // This controls the cookie banner so it shows only once per session
+      const banner = document.querySelector('.cookie-banner');
+      const btn = document.getElementById('cookie-accept');
+      if (!sessionStorage.getItem('cookiesAcknowledged')) {
+        banner.classList.add('show');
+      }
+      btn.addEventListener('click', () => {
+        sessionStorage.setItem('cookiesAcknowledged', 'true');
+        banner.classList.remove('show');
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | My Personal Diary</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* blue theme*/
+    :root{
+      --pd-ink:#003366; --pd-ink-2:#001f4d;
+      --pd-paper:#ffffff; --pd-edge:#b0cff4;
+      --pd-accent:#003366; --pd-accent-2:#001f4d;
+      --pd-muted:#4a5a72;
+      --pd-shadow:0 8px 26px rgba(0,51,102,.08);
+      --pd-radius:16px;
+      --pd-chip-bg:#f0f6ff;
+    }
+
+    .pd-wrap{max-width:1100px; margin:0 auto; padding:36px 20px 80px}
+    .pd-title{ font-weight:800; letter-spacing:.2px; color:var(--pd-ink-2);
+      text-align:center; font-size:clamp(1.7rem,2.8vw,2.3rem); margin:0 0 6px }
+    .pd-sub{ color:#38506b; text-align:center; margin:0 0 22px }
+
+    /* Layout: entries list (left) + editor (right) */
+    .pd-grid{ display:grid; gap:16px; grid-template-columns: 320px 1fr; align-items:start }
+    @media (max-width: 980px){ .pd-grid{ grid-template-columns:1fr } }
+
+    .pd-card{
+      background:var(--pd-paper); border:1px solid var(--pd-edge);
+      border-radius:var(--pd-radius); box-shadow:var(--pd-shadow);
+      padding:14px;
+    }
+    .pd-card h2{ margin:0 0 10px; color:var(--pd-ink); font-size:1.05rem }
+
+    .pd-row{ display:grid; gap:10px; grid-template-columns:1fr 1fr }
+    @media (max-width: 720px){ .pd-row{ grid-template-columns:1fr } }
+
+    .pd-input, .pd-text, .pd-chip-input{
+      width:100%; border:1px solid var(--pd-edge); border-radius:12px; background:#f7fbff;
+      padding:10px 12px; min-height:44px; font-family:inherit; color:var(--pd-ink)
+    }
+    .pd-text{ min-height:240px; resize:vertical; line-height:1.6; background:#ffffff }
+
+    .pd-bar{ display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+    .pd-btn{
+      appearance:none; border:1px solid var(--pd-accent); background:var(--pd-accent); color:#fff;
+      padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer; transition:.15s;
+    }
+    .pd-btn:hover{ background:var(--pd-accent-2); border-color:var(--pd-accent-2) }
+    .pd-btn.secondary{ background:#fff; color:var(--pd-accent) }
+    .pd-btn.secondary:hover{ background:#e6f0ff }
+
+    .pd-pill{ display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--pd-edge);
+      background:#fff; color:#3a4b63 }
+
+    /* Entries list */
+    .pd-search{ display:flex; gap:8px; margin-bottom:8px }
+    .pd-list{ display:grid; gap:10px; max-height:520px; overflow:auto; padding-right:4px }
+    .pd-item{
+      border:1px solid var(--pd-edge); background:#fff; border-radius:12px; padding:10px;
+      display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; cursor:pointer;
+    }
+    .pd-item:hover{ background:#f5faff }
+    .pd-item h3{ margin:0; font-size:.98rem; color:var(--pd-ink) }
+    .pd-item small{ color:#567 }
+    .pd-tags{ color:#2a3c55; font-size:.85rem }
+    .pd-item .pd-del{ display:inline-block }
+
+    .pd-meta{ display:flex; gap:10px; flex-wrap:wrap; color:var(--pd-muted); font-size:.95rem }
+
+    /* Chips for tags preview */
+    .pd-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px }
+    .pd-chip{ padding:6px 10px; border-radius:999px; border:1px solid var(--pd-edge); background:var(--pd-chip-bg); color:#18324f }
+
+    /* Print */
+    @media print{
+      nav, .footer, .pd-list-card, .pd-toolbar, .pd-bar .pd-btn.secondary{ display:none !important }
+      body{ background:#fff }
+      .pd-wrap{ padding:0 }
+      .pd-card{ box-shadow:none; border:1px solid transparent; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem" aria-current="page">My Personal Diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- Diary -->
+  <main class="pd-wrap" id="diary">
+    <h1 class="pd-title">My Personal Diary</h1>
+    <p class="pd-sub">Write freely. Print anytime.</p>
+
+    <section class="pd-grid">
+      <!-- Left: entries list -->
+      <aside class="pd-card pd-list-card" aria-labelledby="entries-h2">
+        <h2 id="entries-h2">Entries</h2>
+        <div class="pd-search">
+          <input id="searchBox" class="pd-input" placeholder="Search title, text, or tags…" />
+          <button class="pd-btn secondary" id="clearSearch" type="button">Clear</button>
+        </div>
+        <div id="listBox" class="pd-list">
+          <div class="pd-meta">No entries yet.</div>
+        </div>
+      </aside>
+
+      <!-- Right: editor -->
+      <section class="pd-card" aria-labelledby="editor-h2">
+        <div class="pd-toolbar" style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+          <h2 id="editor-h2" style="margin:0">Entry</h2>
+          <div class="pd-meta">
+            <span id="wordCount">0 words</span>
+            <span id="lastSaved">Last saved: —</span>
+          </div>
+        </div>
+
+        <div class="pd-row" style="margin-top:10px">
+          <div>
+            <label class="pd-meta" for="entryDate"><b>Date</b></label>
+            <input id="entryDate" class="pd-input" type="date" />
+          </div>
+          <div>
+            <label class="pd-meta" for="entryTitle"><b>Title</b></label>
+            <input id="entryTitle" class="pd-input" placeholder="Give your entry a title…" />
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="pd-meta" for="entryTags"><b>Tags</b> <small style="margin-left:6px">(comma-separated)</small></label>
+          <input id="entryTags" class="pd-chip-input" placeholder="e.g., study, wellbeing, goals" />
+          <div id="tagChips" class="pd-chips"></div>
+        </div>
+
+        <div style="margin-top:10px">
+          <label class="pd-meta" for="entryText"><b>Entry</b></label>
+          <textarea id="entryText" class="pd-text" placeholder="Write freely…"></textarea>
+        </div>
+
+        <div class="pd-bar" style="margin-top:12px">
+          <button class="pd-btn" id="saveBtn" type="button">Save</button>
+          <button class="pd-btn secondary" id="newBtn" type="button">New</button>
+          <button class="pd-btn secondary" id="deleteBtn" type="button">Delete</button>
+          <button class="pd-btn secondary" id="printBtn" type="button">Print</button>
+          <span id="saveStatus" class="pd-pill" aria-live="polite">Not saved</span>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function(){
+      /* Dropdown nav behaviour */
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle'); if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      /* Diary logic */
+      const STORE_KEY = 'unimind_personal_diary_v1';
+      const $ = (id)=>document.getElementById(id);
+
+      // Elements
+      const entryDate=$('entryDate'), entryTitle=$('entryTitle'), entryTags=$('entryTags'), entryText=$('entryText');
+      const tagChips=$('tagChips'), saveBtn=$('saveBtn'), newBtn=$('newBtn'), deleteBtn=$('deleteBtn'), printBtn=$('printBtn');
+      const wordCount=$('wordCount'), lastSaved=$('lastSaved'), saveStatus=$('saveStatus');
+      const listBox=$('listBox'), searchBox=$('searchBox'), clearSearch=$('clearSearch');
+
+      // Helpers
+      const ymd = (d)=> new Date(d).toISOString().slice(0,10);
+      entryDate.value = ymd(new Date());
+      let currentId = null; // id of entry loaded in editor
+
+      function loadStore(){
+        try{ return JSON.parse(localStorage.getItem(STORE_KEY) || '{"entries":[]}'); }
+        catch(e){ return {entries:[]}; }
+      }
+      function saveStore(data){
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      }
+      function computeWords(txt){
+        return (txt||'').trim().split(/\s+/).filter(Boolean).length;
+      }
+      function updateWordCount(){
+        const n = computeWords(entryText.value);
+        wordCount.textContent = n + ' word' + (n===1?'':'s');
+      }
+      function tagsFromInput(){
+        return (entryTags.value||'').split(',').map(s=>s.trim()).filter(Boolean);
+      }
+      function renderTagChips(){
+        const tags = tagsFromInput();
+        tagChips.innerHTML = tags.map(t => `<span class="pd-chip">${t}</span>`).join('');
+      }
+      entryText.addEventListener('input', updateWordCount);
+      entryTags.addEventListener('input', renderTagChips);
+      updateWordCount(); renderTagChips();
+
+      // CRUD
+      function newEntry(){
+        currentId = null;
+        entryDate.value = ymd(new Date());
+        entryTitle.value = '';
+        entryTags.value = '';
+        entryText.value = '';
+        renderTagChips();
+        updateWordCount();
+        saveStatus.textContent='Not saved';
+      }
+      function saveEntry(){
+        const store = loadStore();
+        const payload = {
+          id: currentId || (crypto.randomUUID?.() || Math.random().toString(36).slice(2,10)),
+          date: entryDate.value || ymd(new Date()),
+          title: (entryTitle.value||'').trim() || '(Untitled)',
+          tags: tagsFromInput(),
+          text: (entryText.value||'').trim(),
+          updated: new Date().toISOString()
+        };
+        const i = store.entries.findIndex(e => e.id === payload.id);
+        if(i>=0) store.entries[i] = payload; else store.entries.push(payload);
+        // newest updated first
+        store.entries.sort((a,b)=> (b.updated || '').localeCompare(a.updated || ''));
+        saveStore(store);
+        currentId = payload.id;
+        lastSaved.textContent = 'Last saved: ' + new Date(payload.updated).toLocaleString();
+        saveStatus.textContent = 'Saved ✓';
+        setTimeout(()=> saveStatus.textContent='Not saved', 1200);
+        renderList();
+      }
+      function deleteEntry(){
+        if(!currentId) { newEntry(); return; }
+        if(!confirm('Delete this entry?')) return;
+        const store = loadStore();
+        const idx = store.entries.findIndex(e=> e.id===currentId);
+        if(idx>=0){ store.entries.splice(idx,1); saveStore(store); }
+        newEntry(); renderList();
+      }
+      function openEntry(id){
+        const store = loadStore();
+        const e = store.entries.find(x=>x.id===id);
+        if(!e) return;
+        currentId = e.id;
+        entryDate.value = e.date || ymd(new Date());
+        entryTitle.value = e.title || '';
+        entryTags.value = (e.tags||[]).join(', ');
+        entryText.value = e.text || '';
+        renderTagChips();
+        updateWordCount();
+        lastSaved.textContent = e.updated ? ('Last saved: ' + new Date(e.updated).toLocaleString()) : 'Last saved: —';
+        saveStatus.textContent = 'Loaded';
+        setTimeout(()=> saveStatus.textContent='Not saved', 900);
+      }
+
+      // List + search
+      function renderList(){
+        const store = loadStore();
+        const q = (searchBox.value||'').toLowerCase().trim();
+        const items = store.entries.filter(e=>{
+          if(!q) return true;
+          const hay = [e.title, e.text, (e.tags||[]).join(' ')].join(' ').toLowerCase();
+          return hay.includes(q);
+        });
+        listBox.innerHTML = '';
+        if(!items.length){
+          listBox.innerHTML = '<div class="pd-meta">No entries found.</div>';
+          return;
+        }
+        const frag = document.createDocumentFragment();
+        items.forEach(e=>{
+          const div = document.createElement('div');
+          div.className = 'pd-item';
+          div.innerHTML = `
+            <div>
+              <h3>${e.title || '(Untitled)'}</h3>
+              <small>${e.date || ''}</small>
+              <div class="pd-tags">${(e.tags||[]).join(', ')}</div>
+            </div>
+            <div class="pd-del">
+              <button class="pd-btn secondary" data-del="${e.id}" type="button">Delete</button>
+            </div>
+          `;
+          div.addEventListener('click', (ev)=>{
+            if(ev.target && ev.target.getAttribute('data-del')) return; // let delete btn handle
+            openEntry(e.id);
+          });
+          div.querySelector('[data-del]').addEventListener('click', ()=>{
+            if(confirm('Delete this entry?')){
+              const store2 = loadStore();
+              const idx = store2.entries.findIndex(x=>x.id===e.id);
+              if(idx>=0){ store2.entries.splice(idx,1); saveStore(store2); }
+              if(currentId===e.id) newEntry();
+              renderList();
+            }
+          });
+          frag.appendChild(div);
+        });
+        listBox.appendChild(frag);
+      }
+
+      // Actions
+      newBtn.addEventListener('click', newEntry);
+      saveBtn.addEventListener('click', saveEntry);
+      deleteBtn.addEventListener('click', deleteEntry);
+      printBtn.addEventListener('click', ()=> window.print());
+      searchBox.addEventListener('input', renderList);
+      clearSearch.addEventListener('click', ()=>{ searchBox.value=''; renderList(); });
+
+      // Ctrl/Cmd+S quick save
+      document.addEventListener('keydown', (e)=>{
+        if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveEntry(); }
+      });
+
+      // Auto-save after pause (1.2s)
+      let autosaveTimer=null;
+      [entryDate, entryTitle, entryTags, entryText].forEach(el=>{
+        el.addEventListener('input', ()=>{
+          clearTimeout(autosaveTimer);
+          autosaveTimer = setTimeout(()=> saveEntry(), 1200);
+        });
+      });
+
+      // Init
+      newEntry();
+      renderList();
+    })();
+  </script>
+</body>
+</html>
+
+

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ManasSwasthayam   | Attend Workshops & Webinars</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: 40px 20px 70px; }
+    .page-title { text-align: center; margin-bottom: 24px; color: #003366; }
+    .search-panel { background:#fff; border:1px solid #b0cff4; border-radius:12px; padding:18px; box-shadow:0 6px 12px rgba(0,51,102,.08); overflow:visible; }
+    .form-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; align-items:end; }
+    .form-grid .field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .field label { font-weight:600; color:#003366; }
+    .field select,.field input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #b0cff4; background:#e6f0ff; font:inherit; color:#003366; box-sizing:border-box; }
+    .field.country{grid-column:span 2}.field.university{grid-column:span 2}.field.postcode{grid-column:span 2}.field.concern{grid-column:span 2; position:relative;}
+    .actions{display:flex; gap:10px; align-items:center; justify-content:flex-start; grid-column:span 2;}
+    .btn-search{padding:12px 18px; border-radius:8px; border:1px solid #003366; background:#003366; color:#fff; font-weight:600; cursor:pointer;}
+    .btn-search:hover{background:#001f4d}
+    .note{margin-top:10px; color:#444; font-size:.95rem}
+    .results-wrap{margin-top:24px}
+    .results-header{display:none; justify-content:space-between; align-items:center; margin-bottom:12px; gap:12px}
+    .results-left{display:flex; flex-direction:column; gap:2px}
+    .results-count{color:#003366; font-weight:700}
+    .results-sub{color:#444; font-size:.95rem}
+    .results-right{display:flex; align-items:center; gap:8px}
+    .results-right label{font-weight:600; color:#003366}
+    .sort-select{padding:8px 10px; border-radius:8px; border:1px solid #b0cff4; background:#e6f0ff; color:#003366}
+    .cards-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; align-items:start}
+    .event-card{background:#fff; border:1px solid #b0cff4; border-radius:12px; padding:16px; box-shadow:0 6px 12px rgba(0,51,102,.08); display:flex; flex-direction:column; gap:8px; position:relative}
+    .event-name{color:#001f4d; font-weight:700}
+    .event-meta{color:#444; font-size:.95rem}
+    .rating-row{display:flex; gap:8px; align-items:center}
+    .stars{letter-spacing:2px; font-size:1rem; color:#f5a623}
+    .rating-num{color:#444; font-size:.95rem}
+    .badges{display:flex; flex-wrap:wrap; gap:8px}
+    .badge{display:inline-block; padding:6px 10px; background:#e6f0ff; border:1px solid #b0cff4; color:#003366; border-radius:999px; font-size:.85rem; font-weight:600}
+    .event-actions{display:flex; gap:8px; margin-top:10px}
+    .btn-solid{text-decoration:none; display:inline-block; padding:10px 12px; border-radius:8px; font-weight:600; text-align:center; background:#003366; border:1px solid #003366; color:#fff; cursor:pointer}
+    .btn-solid:hover{background:#001f4d}
+    .empty{text-align:center; color:#444; padding:30px 10px; border:1px dashed #b0cff4; border-radius:12px; background:#f7fbff}
+    .concern-dropdown{position:relative}
+    .concern-toggle{width:100%; text-align:left; padding:10px 36px 10px 12px; border-radius:8px; border:1px solid #b0cff4; background:#e6f0ff; font:inherit; color:#003366; cursor:pointer; box-sizing:border-box; background-image:url('data:image/svg+xml;utf8,<svg fill="%23003366" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M5.8 7.4l4.2 4.2 4.2-4.2 1.4 1.4-5.6 5.6L4.4 8.8z"/></svg>'); background-repeat:no-repeat; background-position:right 10px center}
+    .concern-list{position:absolute; top:calc(100% + 6px); left:0; right:0; max-height:220px; overflow:auto; z-index:1000; background:#fff; border:1px solid #b0cff4; border-radius:10px; box-shadow:0 10px 20px rgba(0,51,102,.14); padding:6px; display:none}
+    .concern-dropdown.open .concern-list{display:block}
+    .concern-item{padding:8px 10px; border-radius:8px; cursor:pointer; color:#003366}
+    .concern-item:hover{background:#e6f0ff}
+    .modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:999}
+    .modal-backdrop.open{display:flex}
+    .modal{width:min(560px,92vw); background:#fff; border:1px solid #b0cff4; border-radius:14px; box-shadow:0 18px 40px rgba(0,51,102,.25); padding:18px}
+    .modal header{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px}
+    .modal h3{margin:0; color:#003366; font-size:1.2rem}
+    .modal .close-btn{border:1px solid #b0cff4; background:#e6f0ff; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700}
+    .modal .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .modal label{font-weight:600; color:#003366}
+    .modal input[type="date"],.modal input[type="time"]{padding:10px 12px; border:1px solid #b0cff4; border-radius:8px; background:#e6f0ff; color:#003366; font:inherit; width:100%}
+    .modal .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:14px}
+    .modal .btn-primary{background:#003366; color:#fff; border:1px solid #003366; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-block}
+    .modal .btn-secondary{background:#fff; color:#003366; border:1px solid #003366; border-radius:8px; padding:10px 14px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-block}
+    .modal .meta{color:#444; font-size:.95rem}
+    @media (max-width:1200px){.form-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.field.country,.field.university,.field.postcode,.field.concern,.actions{grid-column:span 1}}
+    @media (max-width:640px){.form-grid{grid-template-columns:1fr}.modal .grid{grid-template-columns:1fr}.results-header{flex-direction:column; align-items:flex-start; gap:6px}}
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem" aria-current="page">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <h1 class="page-title">Attend Workshops &amp; Webinars (On-site)</h1>
+
+    <section class="search-panel" aria-label="Find events form">
+      <div class="form-grid">
+        <div class="field country">
+          <label for="country">Country</label>
+          <select id="country" required>
+            <option value="United Kingdom">United Kingdom</option>
+            <option disabled>United States</option>
+            <option disabled>Canada</option>
+            <option disabled>Australia</option>
+            <option disabled>Ireland</option>
+            <option disabled>New Zealand</option>
+          </select>
+        </div>
+
+        <div class="field postcode">
+          <label for="postcode">Postcode</label>
+          <select id="postcode">
+            <option value="">Select a postcode</option>
+            <option value="B15 3CC">B15 3CC</option>
+            <option value="B1 1AA">B1 1AA</option>
+            <option value="B3 2BB">B3 2BB</option>
+            <option value="B4 4DD" disabled>B4 4DD</option>
+            <option value="B5 5EE" disabled>B5 5EE</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="English">English</option>
+            <option disabled>Spanish</option>
+            <option disabled>French</option>
+            <option disabled>Arabic</option>
+            <option disabled>Hindi</option>
+            <option disabled>Urdu</option>
+            <option disabled>Mandarin</option>
+            <option disabled>Bengali</option>
+            <option disabled>Polish</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="city">City</label>
+          <select id="city" required>
+            <option value="Birmingham" selected>Birmingham</option>
+            <option disabled>London</option>
+            <option disabled>Manchester</option>
+            <option disabled>Leeds</option>
+            <option disabled>Liverpool</option>
+          </select>
+        </div>
+
+        <div class="field university">
+          <label for="university">University</label>
+          <select id="university">
+            <option value="">Select a university</option>
+            <option value="Northbridge University">Northbridge University</option>
+            <option value="Riverside College">Riverside College</option>
+            <option value="Kingsford University">Kingsford University</option>
+            <option value="Meadowview Institute" disabled>Meadowview Institute</option>
+            <option value="Harborfield University" disabled>Harborfield University</option>
+          </select>
+        </div>
+
+        <div class="field concern">
+          <label for="concernHidden">Concern</label>
+          <div class="concern-dropdown" id="concernDropdown">
+            <button type="button" class="concern-toggle" id="concernToggle" aria-haspopup="listbox" aria-expanded="false">
+              Select a concern
+            </button>
+            <ul class="concern-list" id="concernList" role="listbox">
+              <li class="concern-item" data-value="Anxiety" role="option">Anxiety</li>
+              <li class="concern-item" data-value="Depression" role="option">Depression</li>
+              <li class="concern-item" data-value="PTSD" role="option">PTSD</li>
+              <li class="concern-item" data-value="OCD" role="option">OCD</li>
+              <li class="concern-item" data-value="Eating disorders" role="option">Eating disorders</li>
+              <li class="concern-item" data-value="Bipolar disorder" role="option">Bipolar disorder</li>
+              <li class="concern-item" data-value="ADHD" role="option">ADHD</li>
+              <li class="concern-item" data-value="Substance use" role="option">Substance use</li>
+              <li class="concern-item" data-value="Stress / Burnout" role="option">Stress / Burnout</li>
+              <li class="concern-item" data-value="Sleep problems" role="option">Sleep problems</li>
+              <li class="concern-item" data-value="Grief" role="option">Grief</li>
+              <li class="concern-item" data-value="Panic disorder" role="option">Panic disorder</li>
+              <li class="concern-item" data-value="Social anxiety" role="option">Social anxiety</li>
+              <li class="concern-item" data-value="Phobias" role="option">Phobias</li>
+              <li class="concern-item" data-value="Relationship issues" role="option">Relationship issues</li>
+              <li class="concern-item" data-value="Trauma" role="option">Trauma</li>
+              <li class="concern-item" data-value="Self-harm" role="option">Self-harm</li>
+              <li class="concern-item" data-value="Suicidal thoughts" role="option">Suicidal thoughts</li>
+              <li class="concern-item" data-value="Psychosis" role="option">Psychosis</li>
+              <li class="concern-item" data-value="Autism support" role="option">Autism support</li>
+            </ul>
+            <input type="hidden" id="concernHidden" value="">
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="searchBtn" class="btn-search" type="button">Find events</button>
+        </div>
+      </div>
+
+      <p class="note">We’ll show 20 on-site workshops and webinars nearby based on the chosen university and concern.</p>
+    </section>
+
+    <section class="results-wrap" aria-live="polite">
+      <div class="results-header" id="resultsHeader">
+        <div class="results-left">
+          <div class="results-count" id="resultsCount"></div>
+          <div class="results-sub" id="resultsSub">
+            Location: Birmingham, UK • Postcode: <span id="hdrPostcode">—</span> • Nearest: <span id="hdrMinutes">—</span> min
+          </div>
+        </div>
+        <div class="results-right">
+          <label for="sortSelect">Sort:</label>
+          <select class="sort-select" id="sortSelect" aria-label="Sort results">
+            <option value="nearest">Nearest to me</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="results" class="cards-grid"></div>
+      <div id="empty" class="empty">
+        No results yet. Choose a university or postcode (either order), select a concern, then click <strong>Find events</strong>.
+      </div>
+    </section>
+  </div>
+
+  <!-- Booking modal -->
+  <div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header>
+        <h3 id="modalTitle">Book in person</h3>
+        <button class="close-btn" id="modalClose" aria-label="Close">✕</button>
+      </header>
+      <div id="modalDetails" class="meta" style="margin-bottom:10px;"></div>
+      <div class="grid">
+        <div>
+          <label for="modalDate">Select date</label>
+          <input type="date" id="modalDate">
+        </div>
+        <div>
+          <label for="modalTime">Select time</label>
+          <input type="time" id="modalTime" step="1800" value="10:00">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn-primary" id="modalConfirm">Confirm</button>
+      </div>
+      <div id="modalSuccess" class="meta" style="display:none; margin-top:10px; color:#0b7a2a; font-weight:600;">
+        ✅ Booking saved. See it on your <a href="dashboard.html">Dashboard</a>.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Dropdowns */
+    (function(){
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+    })();
+
+    /* Page logic + per-user booking storage */
+    (function(){
+      // --- form refs
+      const countryEl   = document.getElementById('country');
+      const languageEl  = document.getElementById('language');
+      const cityEl      = document.getElementById('city');
+      const uniEl       = document.getElementById('university');
+      const postcodeEl  = document.getElementById('postcode');
+      const sortEl      = document.getElementById('sortSelect');
+
+      // concern dropdown
+      const concernDropdown = document.getElementById('concernDropdown');
+      const concernToggle   = document.getElementById('concernToggle');
+      const concernList     = document.getElementById('concernList');
+      const concernHidden   = document.getElementById('concernHidden');
+
+      // results + header
+      const searchBtn   = document.getElementById('searchBtn');
+      const resultsEl   = document.getElementById('results');
+      const emptyEl     = document.getElementById('empty');
+      const headerEl    = document.getElementById('resultsHeader');
+      const countEl     = document.getElementById('resultsCount');
+      const hdrPostcode = document.getElementById('hdrPostcode');
+      const hdrMinutes  = document.getElementById('hdrMinutes');
+
+      // modal
+      const backdrop    = document.getElementById('modalBackdrop');
+      const modalClose  = document.getElementById('modalClose');
+      const modalCancel = document.getElementById('modalCancel');
+      const modalConfirm= document.getElementById('modalConfirm');
+      const modalTitle  = document.getElementById('modalTitle');
+      const modalDetails= document.getElementById('modalDetails');
+      const modalDate   = document.getElementById('modalDate');
+      const modalTime   = document.getElementById('modalTime');
+      const modalSuccess= document.getElementById('modalSuccess');
+
+      // ==== AUTH + STORAGE HELPERS (match dashboard) ====
+      const USER_KEY = 'unimind_user';
+      const BASE_APPT_KEY = 'unimind_appointments';
+      function getUserOrRedirect(nextPath = 'workshopandwebinars.html'){
+        const u = JSON.parse(localStorage.getItem(USER_KEY) || 'null');
+        if (!u) window.location.href = 'login.html?next=' + encodeURIComponent(nextPath);
+        return u;
+      }
+      function getUserApptKey(user){
+        const uid = (user.email || user.id || 'default').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+        return `${BASE_APPT_KEY}_${uid}`;
+      }
+      function readAppointments(key){
+        try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
+      }
+      function saveAppointments(key, list){
+        localStorage.setItem(key, JSON.stringify(list));
+      }
+      function addAppointment(appt){
+        const user = getUserOrRedirect();
+        if (!user) return;
+        const KEY = getUserApptKey(user);
+        const list = readAppointments(KEY);
+        list.push({ ...appt, createdAt: new Date().toISOString() }); // append
+        saveAppointments(KEY, list);
+        return list.length;
+      }
+
+      // ==== Uni <-> Postcode mapping
+      const UNI_TO_PC = {"Northbridge University":"B15 3CC","Riverside College":"B1 1AA","Kingsford University":"B3 2BB"};
+      const PC_TO_UNI = {"B15 3CC":"Northbridge University","B1 1AA":"Riverside College","B3 2BB":"Kingsford University"};
+      function onUniversityChange(){ const pc = UNI_TO_PC[uniEl.value]; if (pc) postcodeEl.value = pc; }
+      function onPostcodeChange(){ const uni = PC_TO_UNI[postcodeEl.value]; if (uni) uniEl.value = uni; }
+      uniEl.addEventListener('change', onUniversityChange);
+      postcodeEl.addEventListener('change', onPostcodeChange);
+
+      // ==== RNG + test data
+      function seedRand(seed){ let h=2166136261>>>0; for(let i=0;i<seed.length;i++){ h^=seed.charCodeAt(i); h=Math.imul(h,16777619);} return function(){ h+=0x6D2B79F5; let t=Math.imul(h^(h>>>15),1|h); t^=t+Math.imul(t^(t>>>7),61|t); return ((t^(t>>>14))>>>0)/4294967296; }; }
+      const venues=["St. Mary's Hospital Education Centre","Royal Infirmary Auditorium","Queen Elizabeth Health Hub","City General Conference Hall","Northern Care Wellness Centre","Community Health Pavilion","Mindful Living Centre"];
+      const hosts=["NHS Trust","University Wellbeing Office","Local Charity","Mental Health Foundation","Community Services"];
+      const formats=["Workshop","Seminar","Lecture","Interactive Session","Panel Talk"];
+      function pick(arr,rand){ return arr[Math.floor(rand()*arr.length)] }
+      const MAX_MILES=3.1, MIN_MILES=0.5;
+
+      function generateEvents({postcode, concern, university}) {
+        const city = "Birmingham";
+        const seed = `EVENT|UK|${postcode}|${concern}|English|ONSITE|${city}|${university}`;
+        const rand = seedRand(seed);
+        const items=[];
+        for (let i=1;i<=20;i++){
+          const venue=pick(venues,rand);
+          const host=pick(hosts,rand);
+          const format=pick(formats,rand);
+          const rating=(Math.floor(rand()*21)+80)/20;
+          const rawMiles=rand()*(MAX_MILES-MIN_MILES-0.2)+MIN_MILES;
+          const distance=parseFloat(rawMiles.toFixed(1));
+          const title=`${concern} ${format}`;
+          items.push({id:`${i}`, title, host, venue, city, mode:"On-site", rating:parseFloat(rating.toFixed(1)), distance, concern, postcode, language:"English", university});
+        }
+        items[items.length-1].distance=parseFloat(MAX_MILES.toFixed(1));
+        return items;
+      }
+
+      function starString(r){ const f=Math.floor(r); const h=(r-f)>=0.5?1:0; const e=5-f-h; return '★'.repeat(f)+(h?'☆':'')+'☆'.repeat(e); }
+      function sortByNearest(items){ return [...items].sort((a,b)=>a.distance-b.distance); }
+      function distanceToMinutes(mi){ return Math.max(1, Math.round(mi*4.5)); }
+
+      function render(items){
+        resultsEl.innerHTML="";
+        if(!items.length){ headerEl.style.display="none"; emptyEl.style.display="block"; return; }
+        headerEl.style.display="flex"; emptyEl.style.display="none";
+        countEl.textContent = `${items.length} events found (on-site • Birmingham, UK)`;
+        const nearest=items[0]; hdrMinutes.textContent = distanceToMinutes(nearest.distance);
+
+        const frag=document.createDocumentFragment();
+        items.forEach(ev=>{
+          const el=document.createElement('article');
+          el.className='event-card';
+          el.innerHTML=`
+            <div class="event-name">${ev.title}</div>
+            <div class="event-meta">${ev.host}</div>
+            <div class="event-meta">${ev.city}, ${ev.postcode} • ${ev.venue} • ${ev.mode} • ≈${ev.distance} mi (${distanceToMinutes(ev.distance)} min)</div>
+            <div class="event-meta">University: ${ev.university}</div>
+            <div class="rating-row">
+              <span class="stars" aria-hidden="true">${starString(ev.rating)}</span>
+              <span class="rating-num" aria-label="Rating ${ev.rating} out of 5">(${ev.rating.toFixed(1)}/5)</span>
+            </div>
+            <div class="badges">
+              <span class="badge">${ev.concern}</span>
+              <span class="badge">Postcode: ${ev.postcode}</span>
+              <span class="badge">English</span>
+            </div>
+            <div class="event-actions">
+              <button class="btn-solid book-btn" data-id="${ev.id}">Book in person</button>
+            </div>`;
+          el.dataset.payload = JSON.stringify(ev);
+          frag.appendChild(el);
+        });
+        resultsEl.appendChild(frag);
+
+        resultsEl.querySelectorAll('.book-btn').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            const card=btn.closest('.event-card');
+            const payload=JSON.parse(card.dataset.payload);
+            openModal(payload);
+          });
+        });
+      }
+
+      let current=[]; let currentEvent=null;
+
+      // concern dropdown
+      function closeConcern(){ concernDropdown.classList.remove('open'); concernToggle.setAttribute('aria-expanded','false'); }
+      concernToggle.addEventListener('click', (e)=>{ e.stopPropagation(); const open=!concernDropdown.classList.contains('open'); concernDropdown.classList.toggle('open', open); concernToggle.setAttribute('aria-expanded', String(open)); });
+      concernList.addEventListener('click', (e)=>{ const item=e.target.closest('.concern-item'); if(!item) return; const val=item.dataset.value; concernHidden.value=val; concernToggle.textContent=val; closeConcern(); });
+      document.addEventListener('click', (e)=>{ if(!concernDropdown.contains(e.target)) closeConcern(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeConcern(); });
+
+      // search
+      searchBtn.addEventListener('click', ()=>{
+        countryEl.value="United Kingdom"; languageEl.value="English"; cityEl.value="Birmingham";
+        if(!uniEl.value && postcodeEl.value) onPostcodeChange();
+        if(uniEl.value && !postcodeEl.value) onUniversityChange();
+        if(uniEl.value && postcodeEl.value && ({"Northbridge University":"B15 3CC","Riverside College":"B1 1AA","Kingsford University":"B3 2BB"}[uniEl.value]!==postcodeEl.value)){
+          const fixUni = {"B15 3CC":"Northbridge University","B1 1AA":"Riverside College","B3 2BB":"Kingsford University"}[postcodeEl.value];
+          if(fixUni) uniEl.value = fixUni;
+        }
+        const postcode=postcodeEl.value;
+        const concern=(concernHidden.value||"").trim();
+        const university=uniEl.value;
+
+        if(!concern){ alert("Please choose a concern."); return; }
+        if(!university && !postcode){ alert("Please choose either a university or a postcode."); return; }
+
+        current = sortByNearest(generateEvents({postcode, concern, university}));
+        document.getElementById('hdrPostcode').textContent = postcode || "—";
+        render(current);
+      });
+
+      // sort
+      sortEl.addEventListener('change', ()=>{ if(!current.length) return; if(sortEl.value==='nearest') current = sortByNearest(current); render(current); });
+
+      // modal open/close + booking
+      function openModal(ev){
+        // ensure logged in before booking
+        const u = getUserOrRedirect('workshopandwebinars.html'); if(!u) return;
+
+        currentEvent=ev;
+        const today=new Date().toISOString().split('T')[0];
+        modalDate.min=today; modalDate.value=today; modalTime.value="10:00"; modalSuccess.style.display="none";
+        modalTitle.textContent=`Book in person: ${ev.title}`;
+        modalDetails.innerHTML=`
+          <div><strong>${ev.host}</strong></div>
+          <div>${ev.city}, ${ev.postcode} • ${ev.venue} • ${ev.mode} • ≈${Math.max(1, Math.round(ev.distance*4.5))} min</div>
+          <div>University: ${ev.university} • Concern: ${ev.concern} • Language: English</div>
+        `;
+        backdrop.classList.add('open'); backdrop.setAttribute('aria-hidden','false'); modalDate.focus();
+      }
+      function closeModal(){ backdrop.classList.remove('open'); backdrop.setAttribute('aria-hidden','true'); currentEvent=null; }
+      modalClose.addEventListener('click', closeModal);
+      modalCancel.addEventListener('click', closeModal);
+      backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) closeModal(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && backdrop.classList.contains('open')) closeModal(); });
+
+      modalConfirm.addEventListener('click', ()=>{
+        if(!currentEvent) return;
+        const date=modalDate.value; const time=modalTime.value;
+        if(!date || !time){ alert("Please select both a date and time."); return; }
+        const iso = new Date(`${date}T${time}`).toISOString(); // ISO for dashboard sorting
+        const appt = {
+          type:"Workshop",
+          name: currentEvent.title,
+          title: currentEvent.host,
+          hospital: currentEvent.venue,    // keep field name for dashboard compatibility
+          city: currentEvent.city,
+          mode: currentEvent.mode,
+          concern: currentEvent.concern,
+          postcode: currentEvent.postcode,
+          language: "English",
+          university: currentEvent.university,
+          distance: currentEvent.distance,
+          datetime: iso
+        };
+        addAppointment(appt); // APPEND to per-user key
+        modalSuccess.style.display="block";
+      });
+
+      // initial state
+      headerEl.style.display="none";
+      resultsEl.innerHTML="";
+    })();
+  </script>
+</body>
+</html>

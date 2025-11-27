@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam | Mental Health Challenges Explained</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root{
+      --mh-ink:#003366; --mh-ink-2:#001f4d; --mh-sky:#f0f6ff; --mh-sky-2:#b0cff4;
+      --mh-muted:#4a5a72; --mh-radius:14px; --mh-shadow:0 6px 16px rgba(0,51,102,.12);
+    }
+
+    body{ background:#ffffff; color:#112233; }
+
+    .mh-page{max-width:1100px; margin:0 auto; padding:34px 20px 80px}
+    .mh-h1{ color:var(--mh-ink); text-align:center; margin:0 0 10px; font-size:clamp(1.8rem,2.8vw,2.3rem)}
+    .mh-sub{ color:#395272; text-align:center; margin:0 0 24px}
+
+    .mh-card{
+      background:#fff; border:1px solid var(--mh-sky-2); border-radius:var(--mh-radius); padding:16px;
+      box-shadow:var(--mh-shadow);
+    }
+    .mh-card h2{margin:0 0 8px; color:var(--mh-ink); font-size:1.15rem}
+    .mh-muted{color:var(--mh-muted)}
+    .mh-kicker{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--mh-sky-2); background:#fff; color:#365075; font-weight:600}
+
+    .mh-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; justify-content:flex-start}
+    .mh-tab{
+      appearance:none; border:1px solid var(--mh-ink); background:#fff; color:var(--mh-ink);
+      padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer; transition:.15s;
+    }
+    .mh-tab[aria-selected="true"]{ background:var(--mh-ink); color:#fff; }
+    .mh-tab:hover{ filter:brightness(0.97) }
+
+    .mh-grid{display:grid; gap:16px; grid-template-columns:2fr 1fr; align-items:start}
+    @media (max-width: 980px){ .mh-grid{grid-template-columns:1fr} }
+
+    .mh-section{display:grid; gap:14px}
+    .mh-lead{font-size:1.05rem; color:#2e4664; line-height:1.55}
+
+    .mh-list{display:grid; gap:8px}
+    .mh-li{background:#f7fbff; border:1px solid var(--mh-sky-2); border-radius:10px; padding:10px; line-height:1.45}
+
+    .mh-flex{display:flex; gap:10px; flex-wrap:wrap}
+    .mh-btn{
+      appearance:none; border:1px solid var(--mh-ink); background:var(--mh-ink); color:#fff;
+      padding:10px 12px; border-radius:10px; font-weight:700; cursor:pointer; transition:.15s;
+      text-decoration:none;
+    }
+    .mh-btn:hover{background:var(--mh-ink-2); border-color:var(--mh-ink-2)}
+    .mh-btn.secondary{background:#fff; color:var(--mh-ink)}
+    .mh-btn.secondary:hover{background:#e6f0ff}
+    .mh-pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--mh-sky-2); background:#fff; color:#3a4b63}
+
+    .mh-pane{display:none}
+    .mh-pane.active{display:block}
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem" aria-current="page">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My personal diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="mh-page">
+    <h1 class="mh-h1">Mental Health Challenges Explained</h1>
+    <p class="mh-sub">University students can experience these anywhere: at home, on campus, at work, or out with friends. Explore clear explanations, quick signs to notice, and small steps that help.</p>
+
+    <section class="mh-card" aria-labelledby="choose-h2">
+      <span class="mh-kicker">Choose a topic</span>
+      <h2 id="choose-h2" style="margin-top:6px">Browse challenges</h2>
+
+      <div class="mh-tabs" role="tablist" aria-label="Mental health topics">
+        <button class="mh-tab" role="tab" aria-selected="true" aria-controls="pane-anxiety" id="tab-anxiety">Anxiety</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-depression" id="tab-depression">Depression</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-eating" id="tab-eating">Eating disorders</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-adhd" id="tab-adhd">ADHD</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-substances" id="tab-substances">Substance use</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-stress" id="tab-stress">Stress / Burnout</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-sleep" id="tab-sleep">Sleep problems</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-panic" id="tab-panic">Panic disorder</button>
+        <button class="mh-tab" role="tab" aria-selected="false" aria-controls="pane-suicidal" id="tab-suicidal">Suicidal thoughts</button>
+      </div>
+
+      <!-- Anxiety -->
+      <div class="mh-pane active" id="pane-anxiety" role="tabpanel" aria-labelledby="tab-anxiety">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Anxiety is the body’s alarm system. It’s happens in short bursts, but when it stays switched on it can feel like constant threat mode, restless body, racing thoughts, and avoiding things that matter.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Racing thoughts, “what-if” spirals, difficulty concentrating</div>
+                <div class="mh-li">Tense shoulders, fast heartbeat, stomach discomfort</div>
+                <div class="mh-li">Skipping emails, calls, seminars, or delaying tasks</div>
+                <div class="mh-li">Sleep-onset worries: mind speeds up at bedtime</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Box breathing 4-4-4-4 for 2–3 minutes to calm the body</div>
+                <div class="mh-li">Write a one-line plan: “If X happens, I’ll try Y”</div>
+                <div class="mh-li">Tiny exposure: one small step toward the avoided thing</div>
+                <div class="mh-li">Limit news/social doom-scrolling during study hours</div>
+                <div class="mh-li">Move the body gently (walk/stretch) to discharge tension</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="ax-check-h2">
+            <h2 id="ax-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="ax-check">
+              <label class="mh-li"><input type="checkbox" /> Worry most days</label>
+              <label class="mh-li"><input type="checkbox" /> Tension in chest or shoulders</label>
+              <label class="mh-li"><input type="checkbox" /> Hard to switch off at night</label>
+              <label class="mh-li"><input type="checkbox" /> Avoiding tasks or people</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="ax-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#ax-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Depression -->
+      <div class="mh-pane" id="pane-depression" role="tabpanel" aria-labelledby="tab-depression">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Depression can feel like moving through fog or low mood. It gives low energy, and less interest in things that used to matter. It can be  followed by stress, isolation, or arrive without a clear reason.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Persistent sadness, emptiness, or irritability</div>
+                <div class="mh-li">Changes in sleep or appetite; slower thinking or movement</div>
+                <div class="mh-li">Loss of interest, feeling “numb” or detached</div>
+                <div class="mh-li">Self-criticism, guilt, or hopeless thoughts</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Behavioural activation: one small meaningful action today</div>
+                <div class="mh-li">Light + movement: brief walk outdoors in the morning</div>
+                <div class="mh-li">Break tasks into micro-steps and celebrate completion</div>
+                <div class="mh-li">Keep a gentle routine (wake/meal/study anchors)</div>
+                <div class="mh-li">Talk to someone safe; share what’s been heavy</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="dep-check-h2">
+            <h2 id="dep-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="dep-check">
+              <label class="mh-li"><input type="checkbox" /> Low energy most days</label>
+              <label class="mh-li"><input type="checkbox" /> Less interest in usual activities</label>
+              <label class="mh-li"><input type="checkbox" /> Negative self-talk</label>
+              <label class="mh-li"><input type="checkbox" /> Pulling away from people</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="dep-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#dep-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Eating disorders -->
+      <div class="mh-pane" id="pane-eating" role="tabpanel" aria-labelledby="tab-eating">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Eating disorders and eating concerns involve difficult thoughts and behaviours around food, exercise, and body image. They’re not a choice and can affect anyone, regardless of shape or size.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Strict rules about food/exercise; anxiety if rules shift</div>
+                <div class="mh-li">Binge eating, purging, or secretive eating habits</div>
+                <div class="mh-li">Mood tied to body comments or weighing</div>
+                <div class="mh-li">Avoiding meals with others; rapid weight changes</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Regular meals/snacks to stabilise energy and mood</div>
+                <div class="mh-li">Unfollow body-comparison feeds; curate a kinder feed</div>
+                <div class="mh-li">Name the eating disorder voice; practise a counter-voice</div>
+                <div class="mh-li">Ask a trusted person to eat with you a few times a week</div>
+                <div class="mh-li">Seek support from a clinician with eating-disorder knowledge</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="eat-check-h2">
+            <h2 id="eat-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="eat-check">
+              <label class="mh-li"><input type="checkbox" /> Food rules affect daily life</label>
+              <label class="mh-li"><input type="checkbox" /> Strong guilt after eating</label>
+              <label class="mh-li"><input type="checkbox" /> Body image drives mood</label>
+              <label class="mh-li"><input type="checkbox" /> Avoiding meals with others</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="eat-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#eat-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- ADHD -->
+      <div class="mh-pane" id="pane-adhd" role="tabpanel" aria-labelledby="tab-adhd">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">ADHD affects attention, impulse control, and motivation. Long readings, open-ended essays, and unstructured time can be tough, while interesting tasks may pull intense focus.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Task-starting feels like a wall, even for simple tasks</div>
+                <div class="mh-li">Time blindness; late starts; missed deadlines</div>
+                <div class="mh-li">Many tabs/to-dos open; frequent task-switching</div>
+                <div class="mh-li">Hyperfocus on some tasks, avoidance of others</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Body-double (study with a friend or focus stream)</div>
+                <div class="mh-li">Timers: do tasks for 10-15 minutes then reward your self.</div>
+                <div class="mh-li">Externalise: calendar alarms, whiteboards, sticky notes</div>
+                <div class="mh-li">Break tasks into small parts; start anywhere</div>
+                <div class="mh-li">Ask for clarity from tutors: examples, rubrics, checkpoints</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="ad-check-h2">
+            <h2 id="ad-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="ad-check">
+              <label class="mh-li"><input type="checkbox" /> Hard to start tasks</label>
+              <label class="mh-li"><input type="checkbox" /> Losing track of time</label>
+              <label class="mh-li"><input type="checkbox" /> Switching tasks a lot</label>
+              <label class="mh-li"><input type="checkbox" /> Many tabs or to-dos open</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="ad-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#ad-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Substance use -->
+      <div class="mh-pane" id="pane-substances" role="tabpanel" aria-labelledby="tab-substances">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Alcohol and drug use can begin as social or coping strategies. Over time, they may affect sleep, memory, grades, relationships, and safety.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Using more than planned or more often than intended</div>
+                <div class="mh-li">Skipping classes or work due to after-effects</div>
+                <div class="mh-li">Risky situations, injuries, or regret after use</div>
+                <div class="mh-li">Cravings or withdrawal; hard to cut back</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Plan before events</div>
+                <div class="mh-li">Alternate drinks with water + food</div>
+                <div class="mh-li">Try a short break; notice changes in sleep/mood</div>
+                <div class="mh-li">Replace the role: stress relief via movement or social time</div>
+                <div class="mh-li">Talk to a clinician about safer strategies</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="su-check-h2">
+            <h2 id="su-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="su-check">
+              <label class="mh-li"><input type="checkbox" /> Using to cope with stress</label>
+              <label class="mh-li"><input type="checkbox" /> More than planned or stronger effects</label>
+              <label class="mh-li"><input type="checkbox" /> Impacts on study or safety</label>
+              <label class="mh-li"><input type="checkbox" /> Hard to cut back</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="su-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#su-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Stress / Burnout -->
+      <div class="mh-pane" id="pane-stress" role="tabpanel" aria-labelledby="tab-stress">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Stress is a normal response to demands. Burnout happens when stress is high and recovery is low for a long time. Energy drops, motivation fades, and small tasks feel huge.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Constant tiredness even after sleep</div>
+                <div class="mh-li">Irritability, brain fog, or headaches</div>
+                <div class="mh-li">Procrastination then last-minute panics</div>
+                <div class="mh-li">Feeling detached or “running on empty”</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">1-3-5 method: 1 big, 3 medium, 5 tiny tasks</div>
+                <div class="mh-li">Take breaks; short/lessen screen time</div>
+                <div class="mh-li">Boundaries with work/study time; actual finish time</div>
+                <div class="mh-li">Sleep + food anchors to stabilise energy</div>
+                <div class="mh-li">Ask for extensions or lighter loads when needed</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="bo-check-h2">
+            <h2 id="bo-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="bo-check">
+              <label class="mh-li"><input type="checkbox" /> Exhausted most days</label>
+              <label class="mh-li"><input type="checkbox" /> Hard to focus on reading/tasks</label>
+              <label class="mh-li"><input type="checkbox" /> Snapping at small things</label>
+              <label class="mh-li"><input type="checkbox" /> Skipping meals or breaks</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="bo-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#bo-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Sleep problems -->
+      <div class="mh-pane" id="pane-sleep" role="tabpanel" aria-labelledby="tab-sleep">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Sleep fuels memory, attention, and mood. When sleep is poor, everything feels harder, lectures, social time, and self-care.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Trouble falling asleep or staying asleep</div>
+                <div class="mh-li">Daytime fatigue; naps that push bedtime later</div>
+                <div class="mh-li">Irritability, reduced focus, slower reaction time</div>
+                <div class="mh-li">Screen time in bed; late caffeine or energy drinks</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Regular wake-up time (even weekends) stabilises rhythm</div>
+                <div class="mh-li">dim lights; screens off 30–60 minutes</div>
+                <div class="mh-li">If awake, get up; reset with a calm activity</div>
+                <div class="mh-li">Caffeine cutoff 6–8 hours before bed</div>
+                <div class="mh-li">Keep the bed for sleep, not study/scrolling</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="slp-check-h2">
+            <h2 id="slp-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="slp-check">
+              <label class="mh-li"><input type="checkbox" /> Takes long to fall asleep</label>
+              <label class="mh-li"><input type="checkbox" /> Wakeups during the night</label>
+              <label class="mh-li"><input type="checkbox" /> Tired in the daytime</label>
+              <label class="mh-li"><input type="checkbox" /> Naps that delay bedtime</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="slp-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#slp-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Panic disorder -->
+      <div class="mh-pane" id="pane-panic" role="tabpanel" aria-labelledby="tab-panic">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Panic disorder involves sudden waves of intense fear with strong body sensations (heart racing, short breath, dizziness). Attacks are frightening, but time-limited and not dangerous by themselves.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Sudden fear reaching a peak within minutes</div>
+                <div class="mh-li">Heart pounding, shaking, sweating, chest tightness</div>
+                <div class="mh-li">Feeling unreal (derealisation) or outside the body</div>
+                <div class="mh-li">Fear of future attacks; avoiding triggers</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Slow nasal breathing with longer exhales</div>
+                <div class="mh-li">Grounding: five things you can see, hear, feel</div>
+                <div class="mh-li">Kind reminder: “This is uncomfortable, not dangerous”</div>
+                <div class="mh-li">Afterwards, note what helped so you can reuse it</div>
+                <div class="mh-li">Consider gradual exposure with support</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="pa-check-h2">
+            <h2 id="pa-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits this week.</p>
+            <div class="mh-list" id="pa-check">
+              <label class="mh-li"><input type="checkbox" /> Sudden intense fear</label>
+              <label class="mh-li"><input type="checkbox" /> Racing heart or shaking</label>
+              <label class="mh-li"><input type="checkbox" /> Shortness of breath</label>
+              <label class="mh-li"><input type="checkbox" /> Fear of future attacks</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="pa-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#pa-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <!-- Suicidal thoughts -->
+      <div class="mh-pane" id="pane-suicidal" role="tabpanel" aria-labelledby="tab-suicidal">
+        <div class="mh-grid">
+          <div class="mh-section">
+            <p class="mh-lead">Suicidal thoughts are a signal to get support now. Many people experience them during high stress or low mood. Help works, and people do recover.</p>
+            <div class="mh-card">
+              <h2>Quick signs</h2>
+              <div class="mh-list">
+                <div class="mh-li">Hopelessness, feeling like a burden, or “no way out”</div>
+                <div class="mh-li">Thinking about methods or making plans</div>
+                <div class="mh-li">Withdrawing from others; saying goodbye; giving things away</div>
+                <div class="mh-li">Increased use of alcohol/drugs; risk-taking</div>
+              </div>
+            </div>
+            <div class="mh-card">
+              <h2>What can help now</h2>
+              <div class="mh-list">
+                <div class="mh-li">Tell someone you trust and don’t stay alone</div>
+                <div class="mh-li">Remove or lock away anything you could use to harm yourself</div>
+                <div class="mh-li">Make a short safety plan (who to call, places to go)</div>
+                <div class="mh-li">Use urgent help if risk is high</div>
+                <div class="mh-li">Follow-up with a clinician for ongoing support</div>
+              </div>
+              <div class="mh-flex" style="margin-top:8px">
+                <a class="mh-btn" href="finddoctors.html">Find a clinician</a>
+                <a class="mh-btn secondary" href="emergencyhelp.html">Emergency help</a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="mh-card" aria-labelledby="sui-check-h2">
+            <h2 id="sui-check-h2">Self-check</h2>
+            <p class="mh-muted">Tick what fits right now.</p>
+            <div class="mh-list" id="sui-check">
+              <label class="mh-li"><input type="checkbox" /> Thoughts about ending life</label>
+              <label class="mh-li"><input type="checkbox" /> Feeling like a burden</label>
+              <label class="mh-li"><input type="checkbox" /> Making plans or researching</label>
+              <label class="mh-li"><input type="checkbox" /> Giving away important items</label>
+            </div>
+            <div class="mh-flex" style="margin-top:8px">
+              <span class="mh-pill" id="sui-score">Selected: 0</span>
+              <button class="mh-btn secondary" data-clear="#sui-check">Clear</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <p class="mh-muted" style="text-align:center; margin-top:14px">
+      If there’s risk of harm to yourself or others, please use an emergency number or visit <a href="emergency-help.html">Emergency help</a>.
+    </p>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function(){
+      /* Dropdowns */
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except) {
+        dropdowns.forEach(li => {
+          if (li !== except) {
+            li.classList.remove('open');
+            const btn = li.querySelector('.dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+      dropdowns.forEach(li => {
+        const btn = li.querySelector('.dropdown-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpening = !li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', isOpening);
+          btn.setAttribute('aria-expanded', String(isOpening));
+        });
+      });
+      document.addEventListener('click', () => closeAll(null));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(null); });
+
+      /* Tabs */
+      const tabs = Array.from(document.querySelectorAll('.mh-tab'));
+      const panes = Array.from(document.querySelectorAll('.mh-pane'));
+      tabs.forEach(tab=>{
+        tab.addEventListener('click', ()=>{
+          tabs.forEach(t=> t.setAttribute('aria-selected','false'));
+          panes.forEach(p=> p.classList.remove('active'));
+          tab.setAttribute('aria-selected','true');
+          document.getElementById(tab.getAttribute('aria-controls')).classList.add('active');
+        });
+      });
+
+      /* Checklist counters + clear buttons */
+      function hookupChecklist(containerSel, scoreSel){
+        const box = document.querySelector(containerSel);
+        const score = document.querySelector(scoreSel);
+        if(!box || !score) return;
+        const update = ()=> {
+          const n = box.querySelectorAll('input[type="checkbox"]:checked').length;
+          score.textContent = `Selected: ${n}`;
+        };
+        box.addEventListener('change', update);
+        update();
+      }
+      hookupChecklist('#ax-check','#ax-score');
+      hookupChecklist('#dep-check','#dep-score');
+      hookupChecklist('#eat-check','#eat-score');
+      hookupChecklist('#ad-check','#ad-score');
+      hookupChecklist('#su-check','#su-score');
+      hookupChecklist('#bo-check','#bo-score');
+      hookupChecklist('#slp-check','#slp-score');
+      hookupChecklist('#pa-check','#pa-score');
+      hookupChecklist('#sui-check','#sui-score');
+
+      document.querySelectorAll('[data-clear]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const sel = btn.getAttribute('data-clear');
+          const root = document.querySelector(sel);
+          if(!root) return;
+          root.querySelectorAll('input[type="checkbox"]').forEach(c=> c.checked=false);
+          const score = root.parentElement.querySelector('.mh-pill');
+          if(score) score.textContent = 'Selected: 0';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

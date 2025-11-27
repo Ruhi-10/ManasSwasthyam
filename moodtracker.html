@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ManasSwasthayam| Mood Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* isolate page from global css */
+    *, *::before, *::after{ box-sizing: border-box }
+
+    :root{
+      --mt-ink:#003366; --mt-ink-2:#001f4d;
+      --mt-sky:#f0f6ff; --mt-sky-2:#b0cff4;
+      --mt-muted:#4a5a72; --mt-radius:16px;
+      --mt-shadow:0 8px 24px rgba(0,51,102,.10);
+      --mt-shadow-md:0 12px 30px rgba(0,51,102,.14);
+      --mt-accent:#003a8c; --mt-accent-2:#002a6b;
+      --ring-bg:#e7f0ff;
+    }
+
+    .mt-page{max-width:1100px; margin:0 auto; padding:34px 20px 80px}
+    .mt-title{ color:var(--mt-ink); text-align:center; margin:0 0 6px; font-size:clamp(1.7rem,2.8vw,2.2rem) }
+    .mt-sub{ color:#38506b; text-align:center; margin:0 0 20px }
+
+    .mt-grid{display:grid; gap:16px; grid-template-columns:1.4fr .9fr; align-items:start}
+    @media (max-width: 980px){ .mt-grid{grid-template-columns:1fr} }
+
+    /* Make cards light blue */
+    .mt-card{
+      background:var(--mt-sky); border:1px solid var(--mt-sky-2); border-radius:var(--mt-radius); padding:16px; box-shadow:var(--mt-shadow);
+    }
+    .mt-card h2{margin:0 0 8px; color:var(--mt-ink); font-size:1.1rem}
+    .mt-muted{color:var(--mt-muted); font-size:.95rem}
+
+    .mt-row{display:grid; gap:10px; grid-template-columns:1fr 1fr}
+    @media (max-width: 720px){ .mt-row{grid-template-columns:1fr} }
+
+    .mt-input, .mt-textarea{
+      width:100%; border:1px solid var(--mt-sky-2); border-radius:12px; background:#f5faff; padding:10px 12px; min-height:44px; resize:vertical; font-family:inherit; color:var(--mt-ink)
+    }
+    .mt-textarea{ min-height:110px }
+
+    .mt-btn{
+      appearance:none; border:1px solid var(--mt-ink); background:var(--mt-ink); color:#fff;
+      padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer; transition:.15s
+    }
+    .mt-btn:hover{ background:var(--mt-ink-2); border-color:var(--mt-ink-2) }
+    .mt-btn.secondary{ background:#fff; color:var(--mt-ink) }
+    .mt-btn.secondary:hover{ background:#eaf2ff }
+
+    .mt-pill{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid var(--mt-sky-2); background:#fff; color:#3a4b63}
+
+    .mt-hero{ display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:center }
+    @media (max-width: 760px){ .mt-hero{ grid-template-columns:1fr } }
+
+    /* New ring style: where the orb fully covers the center */
+    .mt-ring{
+      --pct: 50; /* 0–100 */
+      width:240px; height:240px; border-radius:50%;
+      margin:0 auto; position:relative;
+      background: conic-gradient(var(--mt-accent) calc(var(--pct)*1%), var(--ring-bg) 0);
+      box-shadow: var(--mt-shadow-md);
+      padding:14px; /* ring thickness */
+    }
+
+    /* Orb fills the inner area completely with solid light blue for readability */
+    .mt-orb{
+      width:100%; height:100%;
+      border-radius:50%;
+      display:grid; place-items:center;
+      background:#d7e7ff;
+      box-shadow: inset 0 8px 20px rgba(255,255,255,.18), inset 0 -12px 26px rgba(0,0,0,.06);
+    }
+
+    .mt-face{ text-align:center; z-index:1 }
+    .mt-face .mt-emoji{ font-size:2.1rem; display:block; line-height:1 }
+    .mt-face .mt-value{ font-weight:800; color:var(--mt-ink-2); font-size:1.8rem; margin-top:6px }
+
+    .mt-slider-wrap{ margin-top:8px }
+    input[type="range"].mt-range{ width:100% }
+
+    .mt-chips{display:flex; flex-wrap:wrap; gap:8px}
+    .mt-chip{
+      border:1px solid var(--mt-sky-2); background:#fff; color:#2a3c55; border-radius:999px;
+      padding:6px 10px; font-weight:600; cursor:pointer; user-select:none;
+    }
+    .mt-chip.is-on{ background:#e6f0ff; border-color:#8fb6ff }
+
+    .mt-history{display:grid; gap:10px}
+    .mt-entry{border:1px solid var(--mt-sky-2); border-radius:12px; background:#fff; padding:10px}
+    .mt-entry h4{margin:0 0 6px; color:var(--mt-ink)}
+    .mt-entry small{color:#667}
+    .mt-entry .mt-tags{color:#2a3c55; font-size:.9rem}
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">ManasSwasthayam</div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Our Support Services <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="finddoctors.html" role="menuitem">Find doctors near you</a></li>
+          <li><a href="peersupport.html" role="menuitem">Find peer support near you</a></li>
+          <li><a href="workshopsandwebinars.html" role="menuitem">Attend workshops &amp; webinars</a></li>
+          <li><a href="selfguidedtools.html" role="menuitem">Self-guided support</a></li>
+          <li><a href="emergencyhelp.html" role="menuitem">Emergency help</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Useful Resources <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="understandingmentalhealth.html" role="menuitem">Understanding mental health</a></li>
+          <li><a href="mentalhealthchallenges.html" role="menuitem">Mental health challenges explained</a></li>
+          <li><a href="podcastsandvideo.html" role="menuitem">Podcasts &amp; videos</a></li>
+          <li><a href="storiesofsurvivors.html" role="menuitem">Stories of survivors</a></li>
+        </ul>
+      </li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Wellness Tools <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="dailyplanner.html" role="menuitem">Daily planner</a></li>
+          <li><a href="mypersonaldiary.html" role="menuitem">My Personal Diary</a></li>
+          <li><a href="moodtracker.html" role="menuitem" aria-current="page">Mood tracker</a></li>
+          <li><a href="selfassessmentquizz.html" role="menuitem">Self-assessment quizzes</a></li>
+        </ul>
+      </li>
+
+      <li><a href="dashboard.html">User Dashboard</a></li>
+      <li><a href="merchandise.html">Merchandise</a></li>
+
+      <li class="has-dropdown">
+        <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+          Register <span class="caret">▾</span>
+        </button>
+        <ul class="dropdown" role="menu">
+          <li><a href="login.html" role="menuitem">Login</a></li>
+          <li><a href="signup.html" role="menuitem">Sign up</a></li>
+        </ul>
+      </li>
+
+      <li><a href="aboutus.html">About Us</a></li>
+    </ul>
+  </nav>
+
+  <main class="mt-page" id="main">
+    <h1 class="mt-title">Mood Tracker</h1>
+    <p class="mt-sub">A quick daily check-in. Saves privately to this device.</p>
+
+    <section class="mt-grid">
+      <!-- Left: main tool -->
+      <div>
+        <section class="mt-card" aria-labelledby="mood-h2">
+          <h2 id="mood-h2">Today’s Mood</h2>
+          <div class="mt-hero">
+            <!-- Orb + ring -->
+            <div style="display:grid; gap:10px; justify-items:center">
+              <div class="mt-ring" id="moodRing" style="--pct:50">
+                <div class="mt-orb">
+                  <div class="mt-face">
+                    <span class="mt-emoji" id="moodEmoji">😐</span>
+                    <span class="mt-value"><span id="moodNumber">50</span>/100</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick presets -->
+              <div class="mt-chips">
+                <button class="mt-chip" data-preset="20">😞 Low</button>
+                <button class="mt-chip" data-preset="40">😕 Meh</button>
+                <button class="mt-chip" data-preset="70">🙂 Good</button>
+                <button class="mt-chip" data-preset="90">😄 Great</button>
+              </div>
+            </div>
+
+            <!-- Controls -->
+            <div>
+              <div class="mt-row">
+                <div>
+                  <label class="mt-muted" for="moodDate"><b>Date</b></label>
+                  <input id="moodDate" type="date" class="mt-input" />
+                </div>
+                <div class="mt-slider-wrap">
+                  <label class="mt-muted" for="moodSlider"><b>Mood (0–100)</b></label>
+                  <input id="moodSlider" class="mt-range" type="range" min="0" max="100" step="1" />
+                </div>
+              </div>
+
+              <div style="margin-top:10px">
+                <span class="mt-muted"><b>Feelings</b> (tap to toggle)</span>
+                <div id="feelChips" class="mt-chips" style="margin-top:6px"></div>
+              </div>
+
+              <div style="margin-top:10px">
+                <label class="mt-muted" for="moodNote"><b>Note</b> (optional)</label>
+                <textarea id="moodNote" class="mt-textarea" placeholder="What’s influencing your mood today?"></textarea>
+              </div>
+
+              <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:10px; flex-wrap:wrap">
+                <button class="mt-btn" id="saveBtn" type="button">Save</button>
+                <span class="mt-pill" id="saveStatus" aria-live="polite">Not saved</span>
+                <button class="mt-btn secondary" id="clearBtn" type="button">Clear</button>
+                <button class="mt-btn secondary" id="deleteBtn" type="button">Delete day</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right: recent history (last 30 entries) -->
+      <aside class="mt-card" aria-labelledby="history-h2">
+        <h2 id="history-h2">Recent Entries</h2>
+        <div class="mt-history" id="historyBox">
+          <div class="mt-muted">No entries yet.</div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap">
+          <button class="mt-btn secondary" id="todayBtn" type="button">Today</button>
+          <button class="mt-btn secondary" id="yesterdayBtn" type="button">Yesterday</button>
+          <button class="mt-btn secondary" id="clearAllBtn" type="button">Clear all</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 ManasSwasthayam. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function(){
+      /* Dropdown nav behaviour */
+      const dropdowns = Array.from(document.querySelectorAll('.has-dropdown'));
+      function closeAll(except){
+        dropdowns.forEach(li=>{
+          if(li!==except){
+            li.classList.remove('open');
+            const b=li.querySelector('.dropdown-toggle'); if(b) b.setAttribute('aria-expanded','false');
+          }
+        });
+      }
+      dropdowns.forEach(li=>{
+        const btn = li.querySelector('.dropdown-toggle'); if(!btn) return;
+        btn.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const open=!li.classList.contains('open');
+          closeAll(li);
+          li.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', String(open));
+        });
+      });
+      document.addEventListener('click', ()=>closeAll(null));
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeAll(null); });
+
+      /* Mood tracker logic */
+      const STORE_KEY='unimind_mood_tracker_v3';
+      const $=(id)=>document.getElementById(id);
+
+      const moodRing=$('moodRing'), moodEmoji=$('moodEmoji'), moodNumber=$('moodNumber');
+      const moodDate=$('moodDate'), moodSlider=$('moodSlider'), moodNote=$('moodNote');
+      const saveBtn=$('saveBtn'), saveStatus=$('saveStatus'), clearBtn=$('clearBtn'), deleteBtn=$('deleteBtn');
+      const historyBox=$('historyBox');
+      const todayBtn=$('todayBtn'), yesterdayBtn=$('yesterdayBtn'), clearAllBtn=$('clearAllBtn');
+      const feelChips=$('feelChips');
+
+      const feelings=['Calm','Content','Proud','Grateful','Anxious','Low','Irritable','Overwhelmed','Tired','Stressed','Hopeful','Motivated'];
+
+      /* Build feelings chips */
+      feelings.forEach(f=>{
+        const b=document.createElement('button');
+        b.type='button'; b.className='mt-chip'; b.textContent=f;
+        b.addEventListener('click', ()=> b.classList.toggle('is-on'));
+        feelChips.appendChild(b);
+      });
+
+      const ymd=(d)=> new Date(d).toISOString().slice(0,10);
+      const today=ymd(new Date());
+      moodDate.value=today;
+
+      moodSlider.value=50; updateUIFromValue(50);
+
+      /* Quick presets */
+      document.querySelectorAll('[data-preset]').forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const v=parseInt(b.getAttribute('data-preset'),10)||50;
+          moodSlider.value=v; updateUIFromValue(v);
+        });
+      });
+
+      moodSlider.addEventListener('input', ()=> updateUIFromValue(parseInt(moodSlider.value,10)||0));
+      moodDate.addEventListener('change', ()=> loadDay(moodDate.value));
+      saveBtn.addEventListener('click', saveDay);
+      clearBtn.addEventListener('click', clearEditor);
+      deleteBtn.addEventListener('click', deleteDay);
+      todayBtn.addEventListener('click', ()=>{ moodDate.value=ymd(new Date()); loadDay(moodDate.value); });
+      yesterdayBtn.addEventListener('click', ()=>{ const d=new Date(); d.setDate(d.getDate()-1); moodDate.value=ymd(d); loadDay(moodDate.value); });
+      clearAllBtn.addEventListener('click', ()=>{
+        if(confirm('Delete ALL mood data on this device?')){
+          localStorage.removeItem(STORE_KEY); renderHistory(); clearEditor();
+        }
+      });
+
+      /* Storage helpers */
+      function loadStore(){
+        try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch(e){ return {}; }
+      }
+      function saveStore(s){ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+
+      function getUIEntry(){
+        const tags=Array.from(feelChips.querySelectorAll('.mt-chip.is-on')).map(b=>b.textContent);
+        return { mood: parseInt(moodSlider.value,10)||0, note:(moodNote.value||'').trim(), tags };
+      }
+      function setUIEntry(e){
+        if(!e){
+          moodSlider.value=50; updateUIFromValue(50);
+          moodNote.value='';
+          feelChips.querySelectorAll('.mt-chip.is-on').forEach(c=>c.classList.remove('is-on'));
+          return;
+        }
+        moodSlider.value=e.mood||0; updateUIFromValue(e.mood||0);
+        moodNote.value=e.note||'';
+        feelChips.querySelectorAll('.mt-chip').forEach(c=> c.classList.toggle('is-on', (e.tags||[]).includes(c.textContent)));
+      }
+
+      function updateUIFromValue(v){
+        moodNumber.textContent=String(v);
+        moodRing.style.setProperty('--pct', v);
+        moodEmoji.textContent = v<=20 ? '😞' : v<=40 ? '😕' : v<=60 ? '😐' : v<=80 ? '🙂' : '😄';
+      }
+
+      function loadDay(dateStr){
+        const store=loadStore();
+        setUIEntry(store[dateStr]||null);
+        saveStatus.textContent='Not saved';
+        saveStatus.style.background='#fff';
+      }
+
+      function saveDay(){
+        const store=loadStore();
+        store[moodDate.value]=getUIEntry();
+        saveStore(store);
+        saveStatus.textContent='Saved ✓';
+        saveStatus.style.background='#eaf8ee';
+        setTimeout(()=>{ saveStatus.textContent='Not saved'; saveStatus.style.background='#fff'; }, 1200);
+        renderHistory();
+      }
+
+      function deleteDay(){
+        const store=loadStore();
+        if(!store[moodDate.value]){ clearEditor(); return; }
+        if(!confirm('Delete this day’s entry?')) return;
+        delete store[moodDate.value];
+        saveStore(store);
+        clearEditor();
+        renderHistory();
+      }
+
+      function clearEditor(){ setUIEntry(null); }
+
+      function renderHistory(){
+        const store=loadStore();
+        const keys=Object.keys(store).sort().reverse().slice(0,30); // last 30 by date
+        historyBox.innerHTML='';
+        if(!keys.length){ historyBox.innerHTML='<div class="mt-muted">No entries yet.</div>'; return; }
+        const frag=document.createDocumentFragment();
+        keys.forEach(date=>{
+          const e=store[date]||{};
+          const wrap=document.createElement('div');
+          wrap.className='mt-entry';
+          const emoji = (e.mood??0)<=20 ? '😞' : (e.mood<=40 ? '😕' : (e.mood<=60 ? '😐' : (e.mood<=80 ? '🙂' : '😄')));
+          wrap.innerHTML=`
+            <h4>${date} — ${emoji} ${e.mood ?? '—'}/100</h4>
+            <small class="mt-tags">${(e.tags||[]).join(', ')||'(no tags)'}</small>
+            <div style="margin-top:6px; color:#3b4a61; white-space:pre-wrap">${(e.note||'')}</div>
+          `;
+          wrap.addEventListener('click', ()=>{
+            moodDate.value=date; loadDay(date); window.scrollTo({top:0, behavior:'smooth'});
+          });
+          frag.appendChild(wrap);
+        });
+        historyBox.appendChild(frag);
+      }
+
+      // init
+      loadDay(moodDate.value);
+      renderHistory();
+    })();
+  </script>
+</body>
+</html>
